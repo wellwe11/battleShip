@@ -2,6 +2,10 @@ dist/
 
 node_modules/
 
-.gitignore
+.gitignore/
+
+package-lock.json
+
+babel.config.js
 
 
