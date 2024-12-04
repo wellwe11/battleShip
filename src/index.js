@@ -1,2 +1,3 @@
-import "./testJest.js";
 import "./scripts.js";
+import "./boatObject.js";
+import "./gameBoard.js";

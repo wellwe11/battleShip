@@ -1,28 +1,29 @@
 // create boat & add it's length & extra functions
-const Ship = (l, ...fn) => ({
-  boatLength: l,
-  beenHit: 0,
-  isFloating: 1,
+const Ship = (l) => {
+  let boatLength = l;
+  let beenHit = 0;
+  let isFloating = 1;
 
-  // boat gets shot and loses length
-  hit() {
-    this.boatLength--;
-    this.beenHit++;
+  return {
+    // boat gets shot and loses length
+    hit() {
+      boatLength--;
+      beenHit++;
 
-    // check if boat is destroyed or not
-    if (this.boatLength <= 0) {
-      this.isFloating = 0;
-      return this.beenSunk();
-    }
+      // check if boat is destroyed or not
+      if (boatLength <= 0) {
+        isFloating = 0;
+        return this.beenSunk();
+      } else return `Boats length was ${l}, now is ${boatLength}.`;
+    },
 
-    return `Boats length was ${l}, now is ${this.boatLength}.`;
-  },
+    // boats status
+    beenSunk: () => (isFloating !== 0 ? "Boat floating" : "Boat sunk"),
 
-  // boats status
-  beenSunk() {
-    return this.isFloating !== 0 ? "Boat floating" : "Boat sunk";
-  },
-  fn,
-});
+    getLength: () => boatLength,
+
+    isBoatFLoating: () => isFloating,
+  };
+};
 
 module.exports = Ship;
