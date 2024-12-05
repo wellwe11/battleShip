@@ -1,3 +1,4 @@
+// creates a 2d array
 export const createBoard = (n) => {
   let board = [];
   let num = 1;
