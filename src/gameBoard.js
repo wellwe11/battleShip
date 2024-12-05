@@ -1,7 +1,7 @@
 import { createBoard } from "./scripts";
 import Ship from "./boatObject";
 
-const Gameboard = (size) => {
+export const Gameboard = (size) => {
   // crease a scalable board
   const board = createBoard(size);
 
@@ -59,7 +59,5 @@ const Gameboard = (size) => {
     },
   };
 };
-
-const someBoard = Gameboard(3);
 
 module.exports = Gameboard;
