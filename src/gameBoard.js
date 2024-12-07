@@ -1,48 +1,29 @@
-import { createBoard } from "./scripts";
-import Ship from "./boatObject";
+import {
+  createBoard,
+  findCoordinate,
+  findCordWithNoNr,
+  replaceNew,
+} from "./scripts";
+import { Ship } from "./boatObject";
 
 export const Gameboard = (size) => {
   // crease a scalable board
   const board = createBoard(size);
-
   return {
     board,
 
     // add ship to specific coordinate
-    placeShip: (cord, size) => {
-      // create new boat
-      let boat = Ship(size);
-      let msg;
-
-      // place boat on specified location
-      board.forEach((row) => {
-        row.forEach((cell, index) => {
-          if (cell === cord && typeof cell !== "object") {
-            row[index] = boat;
-            msg = `Boat placed at ${cord}`;
-          } else msg = "Place boat elsewhere";
-        });
-      });
-      return msg;
+    placeShip: (cordOne, cordTwo, length) => {
+      const boat = Ship(length);
+      const boatcord = findCoordinate(board, cordOne, cordTwo);
+      replaceNew(board, cordOne, cordTwo, boat);
+      return boatcord;
     },
 
-    // cordOne = row, cordTwo = collumn
-    receiveAttack: (cordOne, cordTwo) => {
-      let result;
-      board.forEach((row, rowIndex) => {
-        return row.forEach((cell, colIndex) => {
-          if (rowIndex === cordOne && colIndex === cordTwo) {
-            if (typeof cell !== "number") {
-              cell.hit();
-              result = "boat has been hit";
-            } else {
-              row[colIndex] = "miss";
-              result = "miss";
-            }
-          }
-        });
-      });
-      return result;
+    receiveAttack: (index) => {
+      const boat = findCordWithNoNr(board, index, size);
+      return boat;
+      // return replaceNew(cordOne, cordTwo, "hit");
     },
 
     areShipsLeft: () => {
@@ -60,4 +41,4 @@ export const Gameboard = (size) => {
   };
 };
 
-module.exports = Gameboard;
+// module.exports = Gameboard;

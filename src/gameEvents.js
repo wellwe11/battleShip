@@ -1,7 +1,10 @@
 import { Player } from "./playerObj";
 
-const playerOne = Player();
-const playerTwo = Player();
+const gamePve = Player();
+
+// playerOne.placeShip(3, 2);
+// playerOne.placeShip(10, 5);
+// playerOne.placeShip(8, 2);
 
 /*gameBoard functions:
 placeShip() - i.e. placeShip(3, 1) will place boat on row[index] 3, with length 1
