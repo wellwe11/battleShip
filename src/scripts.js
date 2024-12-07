@@ -10,18 +10,41 @@ export const createBoard = (n) => {
 };
 
 // add items to board
-export const findCoordinate = (j, cordOne, cordTwo) => j[cordOne]?.[cordTwo];
+export const addToCoordinate = (i, cordOne, cordTwo) => i[cordOne]?.[cordTwo];
 
-// find block with a boat and replace it
-export const findItem = (items, arg) => items.find((n) => n === arg);
+export const splitArray = (arr) => {
+  let array = arr.toString().split("");
+  return array;
+};
 
-// replace number in array with a boat
-export const replaceNew = (arr, cordOne, cordTwo, arg) =>
+// locate boat on board. To find if there are any boards left alive
+export const findTypeOfItem = (items, arg) => {
+  return items.find((n) =>
+    n.find((i) => {
+      return typeof i === arg;
+    })
+  );
+};
+
+// Finds specific item - currently unused
+export const findItem = (items, arg) =>
+  items.find((n) => n.find((i) => i === arg));
+
+// replace number in array with a boat with matching cords
+export const addItemToDeck = (arr, cordOne, cordTwo, arg) =>
   (arr[cordOne][cordTwo] = arg);
 
-// look for boats location and return it
+// returns index of objects. I.e. function will re turn 32 for boat in cell 33
 export const findCordWithNoNr = (arr, index, columns) => {
   const rowIndex = Math.floor(index / columns);
   const colIndex = index % columns;
+  console.log(rowIndex, colIndex);
   return arr[rowIndex][colIndex];
+};
+
+// returns splitted coords from objects to help navigate attacks
+export const findCordOfObject = (index, columns) => {
+  const rowIndex = Math.floor(index / columns);
+  const colIndex = index % columns;
+  return [rowIndex, colIndex];
 };

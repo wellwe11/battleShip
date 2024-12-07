@@ -32,6 +32,8 @@ const somePlayer = Player("jaja");
 
 somePlayer.board.placeShip(3, 2);
 
-console.log(somePlayer.board.receiveAttack(33));
+console.log(somePlayer.board.receiveAttack(32));
 
 console.log(somePlayer.board.board);
+
+console.log(somePlayer.board.areShipsLeft());

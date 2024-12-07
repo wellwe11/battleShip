@@ -1,8 +1,9 @@
 import {
   createBoard,
-  findCoordinate,
-  findCordWithNoNr,
-  replaceNew,
+  addToCoordinate,
+  findCordOfObject,
+  findTypeOfItem,
+  addItemToDeck,
 } from "./scripts";
 import { Ship } from "./boatObject";
 
@@ -15,29 +16,19 @@ export const Gameboard = (size) => {
     // add ship to specific coordinate
     placeShip: (cordOne, cordTwo, length) => {
       const boat = Ship(length);
-      const boatcord = findCoordinate(board, cordOne, cordTwo);
-      replaceNew(board, cordOne, cordTwo, boat);
+      const boatcord = addToCoordinate(board, cordOne, cordTwo);
+      addItemToDeck(board, cordOne, cordTwo, boat);
       return boatcord;
     },
 
+    // gameboard receives click from opposing board
     receiveAttack: (index) => {
-      const boat = findCordWithNoNr(board, index, size);
-      return boat;
-      // return replaceNew(cordOne, cordTwo, "hit");
+      const coords = findCordOfObject(index, size);
+      return addItemToDeck(board, coords[0], coords[1], "hit");
     },
 
-    areShipsLeft: () => {
-      let num = 0;
-      board.forEach((row) => {
-        row.forEach((_, index) => {
-          if (typeof row[index] === "object") {
-            num++;
-          }
-        });
-      });
-      if (num === 0) return "All ships have been sunk";
-      else return num;
-    },
+    // returns true if deck contains object
+    areShipsLeft: () => (!findTypeOfItem(board, "object") ? false : true),
   };
 };
 
