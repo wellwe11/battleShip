@@ -1,23 +1,18 @@
 // create boat & add it's length & extra functions
-export const Ship = (l) => {
+const Ship = (l) => {
   let boatLength = l;
   let beenHit = 0;
-  let floating = true;
+  let floatSatus = false;
+
+  const hit = () => (beenHit++, beenSunk()); // measure boats length compared to hits
+
+  const beenSunk = () => (floatSatus = beenHit === boatLength); // boats status
 
   return {
-    // Measure boats length compared to hits
-    hit() {
-      beenHit++;
-      this.beenSunk();
-    },
+    hit,
 
-    // boats status
-    beenSunk: () =>
-      beenHit === boatLength ? (floating = false) : (floating = true),
-
-    // returns true/false if boat is floating
-    isFloating: () => floating,
+    hasSunk: () => floatSatus, // returns true/false if boat is floating
   };
 };
 
-// module.exports = Ship;
+module.exports = Ship;
