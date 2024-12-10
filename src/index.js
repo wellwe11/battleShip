@@ -7,16 +7,20 @@ const Game = () => {
   const playerTwo = Player("jojo");
 
   const placeDeck = (length, amount, ...players) => {
+    // loop through each player
     players.forEach((player) => {
+      // how many of each ship
       for (let i = 0; i < amount.length; i++) {
+        // length for each specific boat
         for (let j = 0; j < amount[i]; j++) {
-          console.log(amount[i], length[i]);
-          let x = player.randomNum();
-          let y = player.randomNum();
-          if (typeof findCoordinates(player.board.board, x, y) === "number") {
-            player.board.placeShip(x, y, length[j]);
-          } else {
-            console.log("taken");
+          let placed = false;
+          while (!placed) {
+            let x = player.randomNum();
+            let y = player.randomNum();
+            if (typeof findCoordinates(player.board.board, x, y) === "number") {
+              player.board.placeShip(x, y, length[j]);
+              placed = true;
+            }
           }
         }
       }
