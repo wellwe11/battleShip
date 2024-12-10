@@ -1,6 +1,6 @@
 const Gameboard = require("./gameBoard");
 const Player = require("./playerObj");
-const { findCoordinates } = require("./scripts");
+const { findIndex: findCoordinates, findAllTypes } = require("./scripts");
 
 const Game = () => {
   const playerOne = Player("jaja");
@@ -40,6 +40,14 @@ const length = [5, 4, 3, 3, 2];
 const amount = [1, 2, 3, 4, 5];
 
 someGame.placeDeck(length, amount, someGame.playerOne, someGame.playerTwo);
+
+console.log(
+  findAllTypes(
+    "object",
+    someGame.playerOne.board.board,
+    someGame.playerTwo.board.board
+  )
+);
 
 console.log(someGame.playerOne.board.board);
 console.log(someGame.playerTwo.board.board);

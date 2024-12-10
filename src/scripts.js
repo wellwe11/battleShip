@@ -1,58 +1,70 @@
 // creates a 2d array
-const createBoard = (n) => {
-  let board = [];
-  let num = 1;
+const create2dArr = (n, i) => {
+  let arr = [];
+  let num = i;
   for (let i = 0; i < n; i++) {
-    board[i] = [];
-    for (let j = 0; j < n; j++) board[i].push(num++);
+    arr[i] = [];
+    for (let j = 0; j < n; j++) arr[i].push(num++);
   }
-  return board;
+  return arr;
 };
 
 // to find coordinates to place boat
-const findCoordinates = (i, cordOne, cordTwo) => i[cordOne]?.[cordTwo];
+const findIndex = (i, indexOne, indexTwo) => i[indexOne]?.[indexTwo];
 
 // to split objects index into coordinates
 const splitArray = (arr) => arr.toString().split("");
 
 // locate boat on board. To find if there are any boards left alive
-const findTypeOfItem = (items, arg) => {
+const findTypeOfItem = (items, type) => {
   return items.find((n) =>
     n.find((i) => {
-      return typeof i === arg;
+      return typeof i === type;
     })
   );
 };
 
-// Finds specific item - currently unused
-const findItem = (items, arg) => items.find((n) => n.find((i) => i === arg));
+const findAllTypes = (type, ...items) =>
+  items.map((item) =>
+    item.filter((index) => index.some((i) => typeof i === type))
+  );
 
 // replace number in array with a boat with matching coordinates
-const addItemToDeck = (arr, cordOne, cordTwo, arg) =>
-  (arr[cordOne][cordTwo] = arg);
+const addItem = (item, indexOne, indexTwo, arg) =>
+  (item[indexOne][indexTwo] = arg);
 
 // returns index of objects. I.e. function will return 32 for boat in cell 33
-const findCordWithNoNr = (arr, index, columns) => {
-  const rowIndex = Math.floor(index / columns);
-  const colIndex = index % columns;
+const findCordWithNoNr = (arr, row, columns) => {
+  const rowIndex = Math.floor(row / columns);
+  const colIndex = row % columns;
   console.log(rowIndex, colIndex);
   return arr[rowIndex][colIndex];
 };
 
 // returns splitted cords from objects to help navigate attacks
-const findCordOfObject = (index, columns) => {
-  const rowIndex = Math.floor(index / columns);
-  const colIndex = index % columns;
+const findCordOfObject = (row, columns) => {
+  const rowIndex = Math.floor(row / columns);
+  const colIndex = row % columns;
   return [rowIndex, colIndex];
 };
 
+// check objects length
+
+// check for free space relative to objects length r, l, u, d (random)
+// if free:
+// find those coordinates
+// replace coordinates text with "boat"
+// if it is object:
+// change location of object:
+// code has to be run BEFORE boat is placed at coordinates
+
 module.exports = {
-  createBoard,
-  findCoordinates,
+  create2dArr,
+  findIndex,
   splitArray,
   findTypeOfItem,
-  findItem,
-  addItemToDeck,
+  addItem,
   findCordWithNoNr,
   findCordOfObject,
+  findAllTypes,
 };

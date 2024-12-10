@@ -1,15 +1,15 @@
 const {
-  createBoard,
+  create2dArr: createBoard,
   findTypeOfItem,
-  addItemToDeck,
-  findCoordinates,
+  addItem: addItemToDeck,
+  findIndex: findCoordinates,
 } = require("./scripts");
 
 const Ship = require("./boatObject");
 
 const Gameboard = (size) => {
   // increase a scalable board
-  const board = createBoard(size);
+  const board = createBoard(size, 1);
   return {
     board,
 
@@ -24,9 +24,7 @@ const Gameboard = (size) => {
       // place boat on matching coordinates
       if (typeof boatcord === "number")
         return addItemToDeck(board, cordOne, cordTwo, boat);
-      else {
-        // need to place boat somewhere else if cords are taken
-      }
+      return `${cordOne} & ${cordTwo} is taken: object`;
     },
 
     // gameboard receives click from opposing board

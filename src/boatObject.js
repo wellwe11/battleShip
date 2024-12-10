@@ -10,6 +10,7 @@ const Ship = (l) => {
 
   return {
     hit,
+    boatLength,
 
     hasSunk: () => floatSatus, // returns true/false if boat is floating
   };
