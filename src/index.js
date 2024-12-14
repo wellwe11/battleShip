@@ -1,12 +1,24 @@
-const Gameboard = require("./gameBoard");
 const Player = require("./playerObj");
-const { findIndex: findCoordinates, findAllTypes } = require("./scripts");
+const {
+  findIndex: findCoordinates,
+  returnFoundItems,
+  addItem: addItemToDeck,
+  checkArrayForNumbers,
+  checkVerticalSpace,
+} = require("./scripts");
 
 const Game = () => {
   const playerOne = Player("jaja");
   const playerTwo = Player("jojo");
 
-  const placeDeck = (length, amount, ...players) => {
+  // create deck of random boats for each player
+  const placeDeck = (...players) => {
+    // length each type of boat has
+    const length = [5, 4, 3, 3, 2];
+
+    // amount of boats
+    const amount = [1, 2, 3, 4, 5];
+
     // loop through each player
     players.forEach((player) => {
       // how many of each ship
@@ -36,18 +48,35 @@ const Game = () => {
 
 const someGame = Game();
 
-const length = [5, 4, 3, 3, 2];
-const amount = [1, 2, 3, 4, 5];
+const playerOne = someGame.playerOne;
+const boardOne = playerOne.board.board;
 
-someGame.placeDeck(length, amount, someGame.playerOne, someGame.playerTwo);
+const playerTwo = someGame.playerTwo;
+const boardTwo = playerTwo.board.board;
 
-console.log(
-  findAllTypes(
-    "object",
-    someGame.playerOne.board.board,
-    someGame.playerTwo.board.board
-  )
+someGame.placeDeck(playerOne, playerTwo);
+
+returnFoundItems(
+  (cordOne, cordTwo) => {
+    const boat = findCoordinates(boardOne, cordOne, cordTwo);
+    let boatLength = boat.boatLength;
+
+    checkArrayForNumbers(boardOne, cordOne, cordTwo, boatLength);
+    checkVerticalSpace(boardOne, cordOne, cordTwo, boatLength);
+  },
+
+  (cordOne, cordTwo) => {},
+  boardOne,
+  boardTwo
 );
 
-console.log(someGame.playerOne.board.board);
-console.log(someGame.playerTwo.board.board);
+console.log(
+  playerOne.board.receiveAttack(1, 5),
+  playerOne.board.receiveAttack(1, 6),
+  playerOne.board.receiveAttack(1, 7),
+  playerOne.board.receiveAttack(1, 8),
+  playerOne.board.receiveAttack(1, 9)
+);
+
+console.table(boardOne);
+// console.log(someGame.playerTwo.board.board);

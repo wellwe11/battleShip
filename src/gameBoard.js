@@ -1,6 +1,8 @@
 const {
   create2dArr: createBoard,
   findTypeOfItem,
+  checkArrayForNumbers,
+  checkVerticalSpace,
   addItem: addItemToDeck,
   findIndex: findCoordinates,
 } = require("./scripts");
@@ -9,7 +11,7 @@ const Ship = require("./boatObject");
 
 const Gameboard = (size) => {
   // increase a scalable board
-  const board = createBoard(size, 1);
+  const board = createBoard(size);
   return {
     board,
 
@@ -20,6 +22,19 @@ const Gameboard = (size) => {
 
       // find matching cell on 2d array to place boat
       const boatcord = findCoordinates(board, cordOne, cordTwo);
+
+      // let horizontalSpace = checkArrayForNumbers(
+      //   board,
+      //   cordOne,
+      //   cordTwo,
+      //   boat.boatLength
+      // );
+      // let verticalSpace = checkVerticalSpace(
+      //   board,
+      //   cordOne,
+      //   cordTwo,
+      //   boat.boatLength
+      // );
 
       // place boat on matching coordinates
       if (typeof boatcord === "number")
@@ -34,15 +49,16 @@ const Gameboard = (size) => {
 
       // check if cell is a boat
       if (typeof attackedCell === "object") {
+        addItemToDeck(board, cordOne, cordTwo, `${cordTwo} hit`);
         attackedCell.hit();
         if (attackedCell.hasSunk()) {
           addItemToDeck(board, cordOne, cordTwo, "sunk"); // locate sunken boats with string "sunk"
-          return `boat at ${[cordOne, cordTwo]} has sunk`;
+          return `${attackedCell} at ${[cordOne, cordTwo]} has sunk`;
         } else return `boat at ${[cordOne, cordTwo]} was hit`;
 
         // check if its not been hit before
       } else if (typeof attackedCell === "number") {
-        return addItemToDeck(board, cordOne, cordTwo, "hit");
+        return addItemToDeck(board, cordOne, cordTwo, "miss");
       }
 
       return "Cannot use hit on target: " + attackedCell; // if its been hit or some other error, return:

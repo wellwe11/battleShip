@@ -6,12 +6,12 @@ const Player = (playerName) => {
 
   // number to place boat randomly
   const randomNum = () => {
-    let n = Math.floor(Math.random() * 6);
+    let n = Math.floor(Math.random() * 10);
     return n;
   };
 
   return {
-    board: Gameboard(6),
+    board: Gameboard(10),
     randomNum,
     name,
     turn,
