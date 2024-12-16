@@ -1,0 +1,28 @@
+#contentContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+}
+
+#boardContainerOne,
+#boardContainerTwo {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 10%);
+  width: 25%;
+  height: 50%;
+  background-color: gray;
+}
+
+#boardContainerOne > * {
+  width: 98%;
+  height: 98%;
+  border: 1px solid black;
+  background-color: green;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

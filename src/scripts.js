@@ -28,22 +28,8 @@ const findAllTypes = (type, ...items) =>
     item.filter((index) => index.some((i) => typeof i === type))
   );
 
-// apply functions to objects inside 2d array
-const returnFoundItems = (fnOne = () => {}, fnTwo = () => {}, ...items) => {
-  items.forEach((arr, arrIndex) =>
-    arr.forEach((row, index) =>
-      row.forEach((i, columnIndex) => {
-        if (typeof i === "object")
-          arrIndex === 0
-            ? fnOne(index, columnIndex)
-            : fnTwo(index, columnIndex);
-      })
-    )
-  );
-};
-
 // check if there are horizontal space for boat to place itself on board
-const checkArrayForNumbers = (array, indexOne, indexTwo, itemsLength) => {
+const checkHorizontalSpace = (array, indexOne, indexTwo, itemsLength) => {
   let arr = array[indexOne];
 
   if (
@@ -53,7 +39,25 @@ const checkArrayForNumbers = (array, indexOne, indexTwo, itemsLength) => {
   ) {
     for (let i = indexTwo; i >= indexTwo - itemsLength + 1 && i >= 0; i--) {
       if (typeof arr[i] === "number") {
-        addItem(array, indexOne, i, boatIndex);
+        return true;
+      }
+    }
+  }
+};
+
+// check if there are horizontal space for boat to place itself on board
+const addHorizontal = (array, indexOne, indexTwo, itemsLength) => {
+  let arr = array[indexOne];
+  let boatIndex = findIndex(array, indexOne, indexTwo);
+
+  if (
+    typeof arr[indexTwo - 1] === "number" &&
+    typeof arr[indexTwo - itemsLength] === "number" &&
+    indexTwo - itemsLength >= 0
+  ) {
+    for (let i = indexTwo; i >= indexTwo - itemsLength + 1 && i >= 0; i--) {
+      if (typeof arr[i] === "number") {
+        array[indexOne][i] = boatIndex;
       }
     }
   }
@@ -65,10 +69,21 @@ const checkVerticalSpace = (array, indexOne, indexTwo, itemsLength) => {
     if (typeof array[i][indexTwo] === "number") {
       nums.push(array[i][indexTwo]);
 
-      console.log(nums);
+      if (nums.length <= itemsLength) {
+        return true;
+      }
+    }
+  }
+};
+
+const addVertical = (array, indexOne, indexTwo, itemsLength) => {
+  let nums = [];
+  for (let i = indexOne; i < itemsLength + itemsLength; i++) {
+    if (typeof array[i][indexTwo] === "number") {
+      nums.push(array[i][indexTwo]);
 
       if (nums.length <= itemsLength) {
-        addItem(array, i, indexTwo, array[indexOne][indexTwo]);
+        array[i - 1][indexTwo] = array[indexOne][indexTwo];
       }
     }
   }
@@ -93,13 +108,12 @@ const findCordOfObject = (row, columns) => {
 };
 
 const createDivs = (container, amount) => {
-  const element = document.getElementById(container);
-  for (let i = 0; i < amount; i++) {
+  for (let i = 1; i <= amount; i++) {
     let div = document.createElement("div");
-    element.appendChild(div);
-  }
+    div.textContent = i > 9 ? i : `0${i}`;
 
-  return element;
+    document.getElementById(container).appendChild(div);
+  }
 };
 
 module.exports = {
@@ -111,8 +125,9 @@ module.exports = {
   findCordWithNoNr,
   findCordOfObject,
   findAllTypes,
-  returnFoundItems,
-  checkArrayForNumbers,
+  checkHorizontalSpace,
   checkVerticalSpace,
   createDivs,
+  addHorizontal,
+  addVertical,
 };
