@@ -1,12 +1,11 @@
 const {
   create2dArr: createBoard,
   findTypeOfItem,
-  checkVerticalSpace,
   addItem: addItemToDeck,
   findIndex: findCoordinates,
-  checkHorizontalSpace,
-  addHorizontal,
-  addVertical,
+  iterateTwoDArray: doesItFitInArray,
+  addItems,
+  iterateTwoDArray,
 } = require("./scripts");
 
 const Ship = require("./boatObject");
@@ -18,28 +17,11 @@ const Gameboard = (size) => {
     board,
 
     // add ship to specific coordinate
-    placeShip: (cordOne, cordTwo, length) => {
+    placeShip: (cordOne, cordTwo, length, type) => {
       // create boat object
       const boat = Ship(length);
 
-      // find matching cell on 2d array to place boat
-      const boatcord = findCoordinates(board, cordOne, cordTwo);
-
-      // place boat on matching coordinates
-      if (
-        typeof boatcord === "number" &&
-        checkHorizontalSpace(board, cordOne, cordTwo, boat.boatLength)
-      ) {
-        addItemToDeck(board, cordOne, cordTwo, boat);
-        addHorizontal(board, cordOne, cordTwo, boat.boatLength);
-      } else if (
-        typeof boatcord === "number" &&
-        checkVerticalSpace(board, cordOne, cordTwo, boat.boatLength)
-      ) {
-        addItemToDeck(board, cordOne, cordTwo, boat);
-        addVertical(board, cordOne, cordTwo, boat.boatLength);
-      }
-      return `${cordOne} & ${cordTwo} is taken: object`;
+      addItems(board, cordOne, cordTwo, length, boat, type);
     },
 
     // gameboard receives click from opposing board

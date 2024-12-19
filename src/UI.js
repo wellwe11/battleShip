@@ -1,3 +1,3 @@
 const { createDivs } = require("./scripts");
 
-createDivs("boardContainerOne", 100);
+createDivs("boardContainerOne", 99);
