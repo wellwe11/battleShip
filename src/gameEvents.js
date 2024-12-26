@@ -1,5 +1,5 @@
 const Player = require("./playerObj");
-const { iterateTwoDArray, displayPlayersBoats } = require("./scripts");
+const { displayPlayersBoats } = require("./scripts");
 
 const Game = () => {
   const playerOne = Player("jaja");
@@ -31,13 +31,14 @@ someGame.viewBoats("boardContainerOne", boardOne);
 
 document.querySelectorAll("#contentContainer > * > *").forEach((el) => {
   el.addEventListener("click", () => {
-    if (Number(el.textContent)) {
+    if (!isNaN(el.textContent)) {
       playerTwo.board.receiveAttack(
         el,
         Number(el.textContent[0]),
         Number(el.textContent[1])
       );
-    } else console.log("already hit");
+      playerTwo.board.areShipsLeft();
+    }
   });
 });
 
