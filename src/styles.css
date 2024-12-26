@@ -23,6 +23,6 @@
   text-align: center;
 }
 
-#contentContainer > * > *:hover {
+#contentContainer > * > button:hover {
   background-color: orange;
 }

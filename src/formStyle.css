@@ -1,0 +1,44 @@
+#playerForm {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  width: 30%;
+  height: 30%;
+
+  margin-bottom: 25%;
+
+  position: fixed;
+
+  background-color: gray;
+}
+
+#playerForm > * {
+  width: 30%;
+}
+
+#nameInputDiv {
+  display: flex;
+  height: max-content;
+  width: max-content;
+}
+
+#playerOne,
+#playerTwo {
+  display: flex;
+  flex-direction: column;
+}
+
+#nameInputDiv label {
+  align-self: flex-start;
+}
+
+#radioButtonsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: max-content;
+  gap: 1rem;
+}

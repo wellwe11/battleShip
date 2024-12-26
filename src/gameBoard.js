@@ -27,9 +27,11 @@ const Gameboard = (size) => {
     receiveAttack: (obj, cordOne, cordTwo) => {
       // cell matching clicked button
       let attackedCell = board[cordOne][cordTwo];
+      console.log(board);
 
       // check if cell is a boat
       if (typeof attackedCell === "object") {
+        console.log(obj.parentElement);
         // change color/text of btn
         boatHit(obj, "hit", "red");
         // change objects values

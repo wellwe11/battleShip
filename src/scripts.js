@@ -152,6 +152,19 @@ const addObjectsTo2dArray = (object, array) => {
   }
 };
 
+const playerTurn = (player) => {
+  let turn;
+
+  const playerTurn = () => (turn = true);
+
+  const notTurn = () => (turn = false);
+
+  return {
+    playerTurn,
+    notTurn,
+  };
+};
+
 module.exports = {
   create2dArr,
   findTypeOfItem,
@@ -162,4 +175,5 @@ module.exports = {
   changeButtonSunk,
   changeObjButtonsSunk,
   addObjectsTo2dArray,
+  playerTurn,
 };
