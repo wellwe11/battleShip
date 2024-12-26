@@ -1,3 +1,4 @@
-const { createDivs } = require("./scripts");
+const { createDivs, createElements } = require("./scripts");
 
-createDivs("boardContainerOne", 99);
+createElements("boardContainerOne", 99, "button");
+createElements("boardContainerTwo", 99, "button");

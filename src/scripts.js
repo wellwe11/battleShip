@@ -28,26 +28,32 @@ const findAllTypes = (type, ...items) =>
     item.filter((index) => index.some((i) => typeof i === type))
   );
 
-const iterateTwoDArray = (array, row, column, itemslength, type) => {
-  const indexOne = type === "row" ? row : column;
-  const indexTwo = type === "column" ? column : row;
-
-  console.log(indexTwo + itemslength, array.length);
-
-  if (
-    indexTwo + itemslength >= array[indexOne].length ||
-    indexOne + itemslength >= array[indexTwo].length
-  ) {
-    return false;
-  }
-
+const iterateTwoDArray = (array, indexOne, indexTwo, itemslength, type) => {
   if (typeof array[indexOne][indexTwo] === "object") {
     return false;
   }
 
-  for (let i = indexTwo; i <= indexTwo + itemslength; i++) {
-    if (typeof array[indexOne]?.[i] === "object") {
+  if (type === "row") {
+    if (indexTwo + itemslength > array[indexOne].length - 1) {
       return false;
+    }
+
+    for (let i = indexTwo; i <= indexTwo + itemslength; i++) {
+      if (typeof array[indexOne][i] !== "number") {
+        return false;
+      }
+    }
+  }
+
+  if (type === "column") {
+    if (indexTwo + itemslength > array[indexOne].length - 1) {
+      return false;
+    }
+
+    for (let i = indexTwo; i <= indexTwo + itemslength; i++) {
+      if (typeof array[i][indexOne] !== "number") {
+        return false;
+      }
     }
   }
 
@@ -59,16 +65,19 @@ const addItems = (array, indexOne, indexTwo, itemslength, arg, type) => {
     for (let i = indexTwo; i < indexTwo + itemslength; i++) {
       array[indexOne][i] = arg;
     }
-  } else if (type === "column") {
-    for (let i = indexOne; i < indexOne + itemslength; i++) {
-      array[i][indexTwo] = arg;
+  }
+
+  if (type === "column") {
+    for (let i = indexTwo; i < indexTwo + itemslength; i++) {
+      array[i][indexOne] = arg;
     }
   }
 };
 
 // replace number in array with a boat with matching coordinates
-const addItem = (item, indexOne, indexTwo, arg) =>
-  (item[indexOne][indexTwo] = arg);
+const addItem = (board, cordOne, cordTwo, arg) => {
+  board[cordOne][cordTwo] = arg;
+};
 
 // returns index of objects. I.e. function will return 3, 2 for boat in cell 3, 3
 const findCordWithNoNr = (arr, row, columns) => {
@@ -84,13 +93,25 @@ const findCordOfObject = (row, columns) => {
   return [rowIndex, colIndex];
 };
 
-const createDivs = (container, amount) => {
+const createElements = (container, amount, type) => {
   for (let i = 0; i <= amount; i++) {
-    let div = document.createElement("div");
-    div.textContent = i > 9 ? i : `0${i}`;
+    let element = document.createElement(type);
+    element.textContent = i > 9 ? i : `0${i}`;
+    element.id = `${container}btn${i}`;
 
-    document.getElementById(container).appendChild(div);
+    document.getElementById(container).appendChild(element);
   }
+};
+
+const displayPlayersBoats = (player, board) => {
+  document.querySelectorAll(`#${player} > *`).forEach((el) => {
+    if (
+      typeof board[Number(el.textContent[0])][Number(el.textContent[1])] ===
+      "object"
+    ) {
+      el.style.backgroundColor = "gray";
+    }
+  });
 };
 
 module.exports = {
@@ -102,7 +123,8 @@ module.exports = {
   findCordWithNoNr,
   findCordOfObject,
   findAllTypes,
-  createDivs,
+  createElements,
   iterateTwoDArray,
   addItems,
+  displayPlayersBoats,
 };
