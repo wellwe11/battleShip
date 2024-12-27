@@ -223,6 +223,34 @@ const findDomEl = (el) => {
   return element;
 };
 
+const computerOptionChecked = (attacker) => {
+  let attacked = false;
+
+  while (!attacked) {
+    let x = Math.floor(Math.random() * 10);
+    let y = Math.floor(Math.random() * 10);
+
+    document.querySelectorAll("#boardContainerOne > *").forEach((el) => {
+      if (Number(el.textContent) === Number([x, y].join(""))) {
+        attacker.playerTwoAttacks(el, x, y);
+
+        attacked = true;
+      }
+    });
+  }
+};
+
+const playerGameLogic = (container, player, attack) => {
+  findDomEl(container).forEach((el) => {
+    el.addEventListener("click", () => {
+      if (!isNaN(el.textContent)) {
+        attack(el, Number(el.textContent[0]), Number(el.textContent[1]));
+        player.board.areShipsLeft();
+      }
+    });
+  });
+};
+
 module.exports = {
   create2dArr,
   findTypeOfItem,
@@ -239,4 +267,6 @@ module.exports = {
   findDomEl,
   userInputValue,
   submitClicked,
+  computerOptionChecked,
+  playerGameLogic,
 };

@@ -6,6 +6,8 @@ const {
   opponentSelector,
   userInputValue,
   submitClicked,
+  computerOptionChecked,
+  playerGameLogic,
 } = require("./scripts");
 
 const Game = () => {
@@ -58,55 +60,22 @@ document.getElementById("submitBtn").addEventListener("click", (event) => {
 
   const playerOne = someGame.playerOne;
   const playerTwo = someGame.playerTwo;
-  playerOne.turn = true;
-  playerTwo.turn = false;
 
-  document.querySelectorAll("#boardContainerOne > *").forEach((el) => {
-    el.addEventListener("click", () => {
-      if (!isNaN(el.textContent)) {
-        someGame.playerOneAttacks(
-          el,
-          Number(el.textContent[0]),
-          Number(el.textContent[1])
-        );
-        playerTwo.board.areShipsLeft();
-      }
-    });
-  });
+  console.log(playerOne, playerTwo);
 
-  // if option is vs computer
-  // if vs player, make a 3 second countdown, and display instead second persons board
-  document.querySelectorAll("#boardContainerTwo > *").forEach((el) => {
-    el.addEventListener("click", () => {
-      if (!isNaN(el.textContent)) {
-        someGame.playerOneAttacks(
-          el,
-          Number(el.textContent[0]),
-          Number(el.textContent[1])
-        );
-        playerTwo.board.areShipsLeft();
+  playerGameLogic(
+    "#boardContainerOne > *",
+    playerOne,
+    someGame.playerTwoAttacks
+  );
+  playerGameLogic(
+    "#boardContainerTwo > *",
+    playerTwo,
+    someGame.playerOneAttacks
+  );
 
-        if (document.getElementById("computerOption").checked) {
-          let attacked = false;
-
-          while (!attacked) {
-            let x = Math.floor(Math.random() * 10);
-            let y = Math.floor(Math.random() * 10);
-
-            document
-              .querySelectorAll("#boardContainerOne > *")
-              .forEach((el) => {
-                if (Number(el.textContent) === Number([x, y].join(""))) {
-                  someGame.playerTwoAttacks(el, x, y);
-                  playerTwo.board.areShipsLeft();
-                  attacked = true;
-                }
-              });
-          }
-        } else if (document.getElementById("playerOption").checked) {
-          // code
-        }
-      }
-    });
-  });
+  if (document.getElementById("computerOption").checked) {
+    computerOptionChecked(someGame);
+    playerTwo.board.areShipsLeft();
+  }
 });
