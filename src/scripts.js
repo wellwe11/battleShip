@@ -80,11 +80,22 @@ const createElements = (container, amount, type) => {
 const displayPlayersBoats = (player, board) => {
   document.querySelectorAll(`#${player} > *`).forEach((el) => {
     if (
+      !isNaN(el.textContent) &&
       typeof board[Number(el.textContent[0])][Number(el.textContent[1])] ===
-      "object"
+        "object"
     ) {
       el.style.backgroundColor = "gray";
+    } else if (el.textContent === "hit" || el.textContent === "sunk") {
+      el.style.backgroundColor = "red";
+    } else if (el.textContent === "miss") {
+      el.style.backgroundColor = "white";
     }
+  });
+};
+
+const hidePlayerBoats = (player, color) => {
+  document.querySelectorAll(`#${player} > *`).forEach((el) => {
+    el.style.backgroundColor = color;
   });
 };
 
@@ -152,17 +163,64 @@ const addObjectsTo2dArray = (object, array) => {
   }
 };
 
-const playerTurn = (player) => {
-  let turn;
-
-  const playerTurn = () => (turn = true);
-
-  const notTurn = () => (turn = false);
+const changeDisplay = (...els) => {
+  const displayElement = (type) =>
+    document.querySelectorAll(els).forEach((el) => (el.style.display = type));
 
   return {
-    playerTurn,
-    notTurn,
+    displayElement,
   };
+};
+
+const changeAttribute = (...els) => {
+  const changeAtr = (type, boolean) => {
+    document
+      .querySelectorAll(els)
+      .forEach((el) => ((el.setAttribute = type), boolean));
+  };
+
+  return { changeAtr };
+};
+
+//
+const loadForm = () => {
+  changeDisplay("#playerForm").displayElement("flex");
+  changeDisplay("#playerTwo", "#contentContainer > *").displayElement("none");
+};
+
+const opponentSelector = () => {
+  const vsComputer = () => {
+    changeDisplay("#playerTwo").displayElement("none");
+    changeAttribute("#playerTwo").changeAtr("required", false);
+  };
+
+  const vsPlayer = () => {
+    changeDisplay("#playerTwo").displayElement("flex");
+    changeAttribute("#playerTwo").changeAtr("required", true);
+  };
+
+  return {
+    vsComputer,
+    vsPlayer,
+  };
+};
+
+const userInputValue = (el) => {
+  const element = document.querySelector(el).value;
+
+  return element;
+};
+
+const submitClicked = (event) => {
+  event.preventDefault();
+  changeDisplay("#playerForm").displayElement("none");
+  changeDisplay("#contentContainer > *").displayElement("grid");
+};
+
+const findDomEl = (el) => {
+  const element = document.querySelectorAll(el);
+
+  return element;
 };
 
 module.exports = {
@@ -175,5 +233,10 @@ module.exports = {
   changeButtonSunk,
   changeObjButtonsSunk,
   addObjectsTo2dArray,
-  playerTurn,
+  hidePlayerBoats,
+  loadForm,
+  opponentSelector,
+  findDomEl,
+  userInputValue,
+  submitClicked,
 };

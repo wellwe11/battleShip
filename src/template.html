@@ -6,44 +6,46 @@
     <title>Document</title>
   </head>
   <body>
-    <form id="playerForm">
-      <div id="nameInputDiv">
-        <div id="playerOne">
-          <label for="name">Player one Name:</label>
-          <input
-            type="text"
-            id="nameOne"
-            name="name"
-            placeholder="Enter a name..."
-            required
-          />
+    <div id="bodyContainer">
+      <form id="playerForm">
+        <div id="nameInputDiv">
+          <div id="playerOne">
+            <label for="name">Player one Name:</label>
+            <input
+              type="text"
+              id="nameOne"
+              name="name"
+              placeholder="Enter a name..."
+              required
+            />
+          </div>
+          <br />
+          <div id="playerTwo">
+            <label for="name">Player two Name:</label>
+            <input
+              type="text"
+              id="nameTwo"
+              name="name"
+              placeholder="Enter a name..."
+            />
+          </div>
         </div>
         <br />
-        <div id="playerTwo">
-          <label for="name">Player two Name:</label>
-          <input
-            type="text"
-            id="nameTwo"
-            name="name"
-            placeholder="Enter a name..."
-          />
+        <p>Vs computer or another player?</p>
+        <div id="radioButtonsContainer">
+          <input type="radio" id="computerOption" name="opponent" checked />
+          <label for="computerOption">Vs Computer</label>
+          <br />
+          <input type="radio" id="playerOption" name="opponent" />
+          <label for="playerOption">Vs Player</label>
         </div>
-      </div>
-      <br />
-      <p>Vs computer or another player?</p>
-      <div id="radioButtonsContainer">
-        <input type="radio" id="computerOption" name="opponent" checked />
-        <label for="computerOption">Vs Computer</label>
         <br />
-        <input type="radio" id="PlayerOption" name="opponent" />
-        <label for="playerOption">Vs Player</label>
+        <button id="submitBtn">Submit</button>
+      </form>
+      <div id="contentContainer">
+        <div id="boardContainerOne"></div>
+        <div id="boardContainerTwo"></div>
       </div>
-      <br />
-      <button id="submitBtn">Submit</button>
-    </form>
-    <div id="contentContainer">
-      <div id="boardContainerOne"></div>
-      <div id="boardContainerTwo"></div>
     </div>
   </body>
   <script></script>

@@ -1,64 +1,70 @@
 const Player = require("./playerObj");
-const { displayPlayersBoats } = require("./scripts");
+const {
+  displayPlayersBoats,
+  hidePlayerBoats,
+  loadForm,
+  opponentSelector,
+  userInputValue,
+  submitClicked,
+} = require("./scripts");
 
-const Game = (...names) => {
-  const players = names.map((name) => Player(name || "Computer"));
+const Game = () => {
+  const playerOne = Player(userInputValue("#nameOne"));
+  const playerTwo = Player(userInputValue("#nameTwo") || "Computer");
+
+  const placeDeck = (...players) => {
+    players.forEach((player) => {
+      player.board.placeShip();
+    });
+  };
 
   return {
-    players,
-    placeDeck: (...players) => {
-      players.forEach((player) => {
-        player.board.placeShip();
-      });
-    },
-    viewBoats: (player, board) => displayPlayersBoats(player, board),
+    playerOne,
+    playerOneAttacks: (el, cordOne, cordTwo) =>
+      playerTwo.board.receiveAttack(el, cordOne, cordTwo),
+    playerOneViewBoats: () =>
+      displayPlayersBoats("boardContainerOne", playerOne.board.board),
+    playerOneHideBoats: () => hidePlayerBoats("boardContainerOne", "green"),
+
+    playerTwo,
+    playerTwoAttacks: (el, cordOne, cordTwo) =>
+      playerOne.board.receiveAttack(el, cordOne, cordTwo),
+    playerTwoViewBoats: () =>
+      displayPlayersBoats("boardContainerTwo", playerTwo.board.board),
+    playerTwoHideBoats: () => hidePlayerBoats("boardContainerOne", "green"),
+
+    placeDecks: () => placeDeck(playerOne, playerTwo),
   };
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("playerForm").style.display = "flex";
-  document.getElementById("playerTwo").style.display = "none";
-  document.querySelectorAll("#contentContainer > *").forEach((element) => {
-    element.style.display = "none";
-  });
-});
+document.addEventListener("DOMContentLoaded", () => loadForm());
 
-document.getElementById("computerOption").addEventListener("click", () => {
-  document.getElementById("playerTwo").style.display = "none";
-  document.getElementById("playerTwo").setAttribute("required", false);
-});
+document
+  .getElementById("computerOption")
+  .addEventListener("click", () => opponentSelector().vsComputer());
 
-document.getElementById("PlayerOption").addEventListener("click", () => {
-  document.getElementById("playerTwo").style.display = "flex";
-  document.getElementById("playerTwo").setAttribute("required", true);
-});
+document
+  .getElementById("playerOption")
+  .addEventListener("click", () => opponentSelector().vsPlayer());
+
+//---------------//---------------//---------------//---------------//---------------//---------------
 
 document.getElementById("submitBtn").addEventListener("click", (event) => {
-  event.preventDefault();
-  document.getElementById("playerForm").style.display = "none";
-  document.querySelectorAll("#contentContainer > *").forEach((element) => {
-    element.style.display = "grid";
-  });
+  submitClicked(event);
 
-  const someGame = Game(
-    document.getElementById("nameOne").value,
-    document.getElementById("nameTwo").value
-  );
+  const someGame = Game();
+  someGame.placeDecks();
+  someGame.playerOneViewBoats();
 
-  const playerOne = someGame.players[0];
-  const playerTwo = someGame.players[1];
-
-  console.log(someGame.players);
-
-  someGame.placeDeck(playerOne, playerTwo);
-  someGame.viewBoats("boardContainerOne", playerOne.board.board);
-
-  // someGame.viewBoats("boardContainerTwo", boardTwo);
+  const playerOne = someGame.playerOne;
+  const playerTwo = someGame.playerTwo;
+  playerOne.turn = true;
+  playerTwo.turn = false;
 
   document.querySelectorAll("#boardContainerOne > *").forEach((el) => {
     el.addEventListener("click", () => {
       if (!isNaN(el.textContent)) {
-        playerOne.board.receiveAttack(
+        someGame.playerOneAttacks(
           el,
           Number(el.textContent[0]),
           Number(el.textContent[1])
@@ -68,15 +74,38 @@ document.getElementById("submitBtn").addEventListener("click", (event) => {
     });
   });
 
+  // if option is vs computer
+  // if vs player, make a 3 second countdown, and display instead second persons board
   document.querySelectorAll("#boardContainerTwo > *").forEach((el) => {
     el.addEventListener("click", () => {
       if (!isNaN(el.textContent)) {
-        playerTwo.board.receiveAttack(
+        someGame.playerOneAttacks(
           el,
           Number(el.textContent[0]),
           Number(el.textContent[1])
         );
         playerTwo.board.areShipsLeft();
+
+        if (document.getElementById("computerOption").checked) {
+          let attacked = false;
+
+          while (!attacked) {
+            let x = Math.floor(Math.random() * 10);
+            let y = Math.floor(Math.random() * 10);
+
+            document
+              .querySelectorAll("#boardContainerOne > *")
+              .forEach((el) => {
+                if (Number(el.textContent) === Number([x, y].join(""))) {
+                  someGame.playerTwoAttacks(el, x, y);
+                  playerTwo.board.areShipsLeft();
+                  attacked = true;
+                }
+              });
+          }
+        } else if (document.getElementById("playerOption").checked) {
+          // code
+        }
       }
     });
   });
