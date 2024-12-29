@@ -1,44 +1,64 @@
 const Player = require("./playerObj");
 const {
   displayPlayersBoats,
-  hidePlayerBoats,
+  changeBtnColor: hidePlayerBoats,
   loadForm,
   opponentSelector,
   userInputValue,
   submitClicked,
   computerOptionChecked,
   playerGameLogic,
+  playerTurn,
 } = require("./scripts");
 
 const Game = () => {
   const playerOne = Player(userInputValue("#nameOne"));
   const playerTwo = Player(userInputValue("#nameTwo") || "Computer");
 
+  playerOne.turn = true;
+  playerTwo.turn = false;
+
   const placeDeck = (...players) => {
     players.forEach((player) => {
       player.board.placeShip();
     });
   };
+  placeDeck(playerOne, playerTwo);
+
+  const currentPlayer = playerTurn(playerOne, playerTwo);
+
+  playerGameLogic("#boardContainerTwo > *", playerTwo.board.receiveAttack);
+  playerGameLogic("#boardContainerOne > *", playerOne.board.receiveAttack);
 
   return {
-    playerOne,
-    playerOneAttacks: (el, cordOne, cordTwo) =>
-      playerTwo.board.receiveAttack(el, cordOne, cordTwo),
-    playerOneViewBoats: () =>
-      displayPlayersBoats("boardContainerOne", playerOne.board.board),
-    playerOneHideBoats: () => hidePlayerBoats("boardContainerOne", "green"),
+    displayCurrentBoard: () => {
+      if (playerOne.turn === true) {
+        setTimeout(() => {
+          displayPlayersBoats("boardContainerOne", playerOne.board.board);
+        }, 3000);
+        hidePlayerBoats("boardContainerTwo", "gray", "green");
+      } else if (playerOne.turn === false) {
+        setTimeout(() => {
+          displayPlayersBoats("boardContainerTwo", playerTwo.board.board);
+        }, 3000);
+        hidePlayerBoats("boardContainerOne", "gray", "green");
+      }
+    },
 
-    playerTwo,
-    playerTwoAttacks: (el, cordOne, cordTwo) =>
-      playerOne.board.receiveAttack(el, cordOne, cordTwo),
-    playerTwoViewBoats: () =>
-      displayPlayersBoats("boardContainerTwo", playerTwo.board.board),
-    playerTwoHideBoats: () => hidePlayerBoats("boardContainerOne", "green"),
+    displayVsComputer: () => {
+      displayPlayersBoats("boardContainerOne", playerOne.board.board);
+    },
 
-    placeDecks: () => placeDeck(playerOne, playerTwo),
+    computerAttack: () => computerOptionChecked(playerOne.board.receiveAttack),
+
+    newTurn: () => {
+      currentPlayer.changePlayerTurn(), currentPlayer.clickableBoard();
+    },
   };
 };
 
+//---------------//---------------//---------------//---------------//---------------//---------------
+// event listeners for form
 document.addEventListener("DOMContentLoaded", () => loadForm());
 
 document
@@ -49,33 +69,24 @@ document
   .getElementById("playerOption")
   .addEventListener("click", () => opponentSelector().vsPlayer());
 
-//---------------//---------------//---------------//---------------//---------------//---------------
-
 document.getElementById("submitBtn").addEventListener("click", (event) => {
   submitClicked(event);
-
   const someGame = Game();
-  someGame.placeDecks();
-  someGame.playerOneViewBoats();
 
-  const playerOne = someGame.playerOne;
-  const playerTwo = someGame.playerTwo;
-
-  console.log(playerOne, playerTwo);
-
-  playerGameLogic(
-    "#boardContainerOne > *",
-    playerOne,
-    someGame.playerTwoAttacks
-  );
-  playerGameLogic(
-    "#boardContainerTwo > *",
-    playerTwo,
-    someGame.playerOneAttacks
-  );
-
-  if (document.getElementById("computerOption").checked) {
-    computerOptionChecked(someGame);
-    playerTwo.board.areShipsLeft();
+  if (document.getElementById("playerOption").checked) {
+    someGame.newTurn();
+    someGame.displayCurrentBoard();
+    document.querySelectorAll("#contentContainer > * > *").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        someGame.newTurn();
+        someGame.displayCurrentBoard();
+      });
+    });
+  } else if (document.getElementById("computerOption").checked) {
+    someGame.displayVsComputer();
+    someGame.newTurn();
+    someGame.computerAttack();
   }
 });
+
+//---------------//---------------//---------------//---------------//---------------//---------------

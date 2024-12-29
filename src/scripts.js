@@ -93,9 +93,11 @@ const displayPlayersBoats = (player, board) => {
   });
 };
 
-const hidePlayerBoats = (player, color) => {
+const changeBtnColor = (player, objClr, color) => {
   document.querySelectorAll(`#${player} > *`).forEach((el) => {
-    el.style.backgroundColor = color;
+    if (el.style.backgroundColor === objClr) {
+      el.style.backgroundColor = color;
+    }
   });
 };
 
@@ -223,32 +225,81 @@ const findDomEl = (el) => {
   return element;
 };
 
-const computerOptionChecked = (attacker) => {
-  let attacked = false;
+const computerOptionChecked = (fn) => {
+  document.querySelectorAll("#boardContainerTwo > *").forEach((el) => {
+    el.addEventListener("click", (event) => {
+      if (event) {
+        let attacked = false;
 
-  while (!attacked) {
-    let x = Math.floor(Math.random() * 10);
-    let y = Math.floor(Math.random() * 10);
+        while (!attacked) {
+          let x = Math.floor(Math.random() * 10);
+          let y = Math.floor(Math.random() * 10);
 
-    document.querySelectorAll("#boardContainerOne > *").forEach((el) => {
-      if (Number(el.textContent) === Number([x, y].join(""))) {
-        attacker.playerTwoAttacks(el, x, y);
-
-        attacked = true;
-      }
-    });
-  }
-};
-
-const playerGameLogic = (container, player, attack) => {
-  findDomEl(container).forEach((el) => {
-    el.addEventListener("click", () => {
-      if (!isNaN(el.textContent)) {
-        attack(el, Number(el.textContent[0]), Number(el.textContent[1]));
-        player.board.areShipsLeft();
+          document.querySelectorAll("#boardContainerOne > *").forEach((el) => {
+            if (Number(el.textContent) === Number([x, y].join(""))) {
+              setTimeout(() => {
+                fn(el, x, y);
+                el.disabled = true;
+              }, 3001);
+              attacked = true;
+            }
+          });
+        }
       }
     });
   });
+};
+
+const playerGameLogic = (container, attack) => {
+  findDomEl(container).forEach((el) => {
+    if (!isNaN(el.textContent)) {
+      el.addEventListener("click", () => {
+        attack(el, Number(el.textContent[0]), Number(el.textContent[1]));
+        el.disabled = true;
+      });
+    }
+  });
+};
+
+const changePointerEvent = (el, onOff) => {
+  document.querySelectorAll(el).forEach((btn) => {
+    btn.style.pointerEvents = onOff;
+  });
+};
+
+const playerTurn = (playerOne, playerTwo) => {
+  const changePlayerTurn = () => {
+    document.querySelectorAll("#contentContainer > * > *").forEach((el) => {
+      el.addEventListener("click", () => {
+        if (el.parentElement.id === "boardContainerTwo") {
+          playerOne.turn = false;
+          playerTwo.turn = true;
+        } else if (el.parentElement.id === "boardContainerOne") {
+          playerOne.turn = true;
+          playerTwo.turn = false;
+        }
+      });
+    });
+  };
+
+  const clickableBoard = () => {
+    console.log(playerOne.turn, playerTwo.turn);
+    document.querySelectorAll("#boardContainerOne").forEach((btn) => {
+      btn.style.pointerEvents = "none";
+    });
+    if (!playerOne.turn && playerTwo.turn) {
+      changePointerEvent("#boardContainerOne", "auto");
+      changePointerEvent("#boardContainerTwo", "none");
+    } else if (!playerTwo.turn && playerOne.turn) {
+      changePointerEvent("#boardContainerOne", "none");
+      changePointerEvent("#boardContainerTwo", "auto");
+    }
+  };
+
+  return {
+    changePlayerTurn,
+    clickableBoard,
+  };
 };
 
 module.exports = {
@@ -261,7 +312,7 @@ module.exports = {
   changeButtonSunk,
   changeObjButtonsSunk,
   addObjectsTo2dArray,
-  hidePlayerBoats,
+  changeBtnColor,
   loadForm,
   opponentSelector,
   findDomEl,
@@ -269,4 +320,5 @@ module.exports = {
   submitClicked,
   computerOptionChecked,
   playerGameLogic,
+  playerTurn,
 };

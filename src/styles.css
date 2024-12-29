@@ -4,6 +4,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: auto;
+}
+
+#mainContent {
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(200px, 1fr));
+  grid-template-rows: repeat(2, minmax(100px, 200px));
+
+  width: 100%;
+  height: 100%;
 }
 
 #contentContainer {
@@ -12,20 +23,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: auto;
   gap: 10px;
+
+  grid-column: 2 / 4;
+  grid-row: 2;
 }
 
 #contentContainer > * {
   display: grid;
   grid-template-columns: repeat(auto-fill, 10%);
-  width: 25%;
-  height: 50%;
+  width: 100%;
+  height: 100%;
   background-color: gray;
 }
 
 #contentContainer > * > * {
-  border: 1px solid black;
   background-color: green;
 
   text-align: center;
@@ -33,4 +45,13 @@
 
 #contentContainer > * > button:hover {
   background-color: orange;
+}
+
+#playerNames {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: end;
+
+  grid-column: 2 / 4;
+  grid-row: 1;
 }
