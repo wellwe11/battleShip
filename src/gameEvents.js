@@ -50,7 +50,6 @@ const Game = () => {
         time = 0;
       }
 
-      console.log(time);
       if (playerOne.turn === true) {
         setTimeout(() => {
           displayPlayersBoats("boardContainerOne", playerOne.board.board);
@@ -94,6 +93,9 @@ const Game = () => {
         playerTurn(playerOne, playerTwo);
       }, time);
     },
+
+    playerOne,
+    playerTwo,
   };
 };
 
@@ -137,7 +139,7 @@ document.getElementById("submitBtn").addEventListener("click", (event) => {
 
     document.querySelectorAll("#boardContainerTwo > *").forEach((btn) => {
       btn.addEventListener("click", (event) => {
-        if (event) {
+        if (event.target.textContent === "miss") {
           document.querySelectorAll("#boardContainerTwo > *").forEach((btn) => {
             btn.style.pointerEvents = "none";
           });

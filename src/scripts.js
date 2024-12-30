@@ -226,27 +226,39 @@ const findDomEl = (el) => {
 };
 
 const computerOptionChecked = (fn) => {
+  const attackPlayerBoard = () => {
+    let attacked = false;
+
+    let x = Math.floor(Math.random() * 10);
+    let y = Math.floor(Math.random() * 10);
+
+    document.querySelectorAll("#boardContainerOne > *").forEach((elOne) => {
+      if (
+        Number(elOne.textContent) === Number([x, y].join("")) &&
+        !elOne.disabled
+      ) {
+        setTimeout(() => {
+          fn(elOne, x, y);
+          elOne.disabled = true;
+
+          if (elOne.style.backgroundColor === "white") {
+            attacked = true;
+          } else {
+            attackPlayerBoard();
+          }
+        }, 2000);
+      }
+    });
+  };
+
   document.querySelectorAll("#boardContainerTwo > *").forEach((el) => {
     el.addEventListener("click", (event) => {
-      if (event) {
-        let attacked = false;
-
-        while (!attacked) {
-          let x = Math.floor(Math.random() * 10);
-          let y = Math.floor(Math.random() * 10);
-
-          document
-            .querySelectorAll("#boardContainerOne > *")
-            .forEach((elOne) => {
-              if (Number(elOne.textContent) === Number([x, y].join(""))) {
-                setTimeout(() => {
-                  fn(elOne, x, y);
-                  elOne.disabled = true;
-                }, 2000);
-                attacked = true;
-              }
-            });
-        }
+      if (
+        event &&
+        event.target.textContent !== "hit" &&
+        event.target.textContent !== "sunk"
+      ) {
+        attackPlayerBoard();
       }
     });
   });
@@ -329,6 +341,3 @@ module.exports = {
   playerHitShip,
   noOneCanClick,
 };
-
-// fix so if u hit a boat u play again vs computer
-// fix so computer plays again if it hits a boatw
