@@ -9,15 +9,21 @@ const {
   computerOptionChecked,
   playerGameLogic,
   playerTurn,
+  toggleTurn,
+  playerHitShip,
+  noOneCanClick,
 } = require("./scripts");
 
 const Game = () => {
+  // enforce always to players
   const playerOne = Player(userInputValue("#nameOne"));
   const playerTwo = Player(userInputValue("#nameTwo") || "Computer");
 
-  playerOne.turn = true;
-  playerTwo.turn = false;
+  // pre-determined turn
+  playerOne.turn = false;
+  playerTwo.turn = true;
 
+  // place decks for each player
   const placeDeck = (...players) => {
     players.forEach((player) => {
       player.board.placeShip();
@@ -25,12 +31,18 @@ const Game = () => {
   };
   placeDeck(playerOne, playerTwo);
 
-  const currentPlayer = playerTurn(playerOne, playerTwo);
-
+  // connects buttons to arrays. I.e button 32 is clicked, compared matching array cell
   playerGameLogic("#boardContainerTwo > *", playerTwo.board.receiveAttack);
   playerGameLogic("#boardContainerOne > *", playerOne.board.receiveAttack);
 
   return {
+    // enforce player ones board at start to be viewable after 3 seconds
+    viewBoardStart: () => {
+      setTimeout(() => {
+        displayPlayersBoats("boardContainerOne", playerOne.board.board);
+      }, 3000);
+    },
+    // display current players turns board with a timeout of 3 seconds
     displayCurrentBoard: () => {
       if (playerOne.turn === true) {
         setTimeout(() => {
@@ -45,14 +57,29 @@ const Game = () => {
       }
     },
 
+    // constantly display player boats as changing isn't needed
     displayVsComputer: () => {
       displayPlayersBoats("boardContainerOne", playerOne.board.board);
     },
 
-    computerAttack: () => computerOptionChecked(playerOne.board.receiveAttack),
+    // random attack on player board
+    computerAttack: () => {
+      computerOptionChecked(playerOne.board.receiveAttack);
+    },
 
-    newTurn: () => {
-      currentPlayer.changePlayerTurn(), currentPlayer.clickableBoard();
+    newTurn: (event) => {
+      // if hit ship, players turn again
+      playerHitShip(event, playerOne, playerTwo);
+      // if miss, next players turn
+      toggleTurn(playerOne, playerTwo);
+
+      // new player turn with a cooldown to allow other player to look away in time
+      noOneCanClick();
+
+      // cooldown to prevent instant clicks
+      setTimeout(() => {
+        playerTurn(playerOne, playerTwo);
+      }, 3000);
     },
   };
 };
@@ -75,10 +102,10 @@ document.getElementById("submitBtn").addEventListener("click", (event) => {
 
   if (document.getElementById("playerOption").checked) {
     someGame.newTurn();
-    someGame.displayCurrentBoard();
+    someGame.viewBoardStart();
     document.querySelectorAll("#contentContainer > * > *").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        someGame.newTurn();
+      btn.addEventListener("click", (event) => {
+        someGame.newTurn(event.target);
         someGame.displayCurrentBoard();
       });
     });
@@ -86,6 +113,23 @@ document.getElementById("submitBtn").addEventListener("click", (event) => {
     someGame.displayVsComputer();
     someGame.newTurn();
     someGame.computerAttack();
+
+    document.querySelectorAll("#boardContainerTwo > *").forEach((btn) => {
+      btn.addEventListener("click", (event) => {
+        if (event) {
+          document.querySelectorAll("#boardContainerTwo > *").forEach((btn) => {
+            btn.style.pointerEvents = "none";
+          });
+          setTimeout(() => {
+            document
+              .querySelectorAll("#boardContainerTwo > *")
+              .forEach((btn) => {
+                btn.style.pointerEvents = "auto";
+              });
+          }, 3000);
+        }
+      });
+    });
   }
 });
 

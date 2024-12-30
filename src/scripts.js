@@ -267,39 +267,41 @@ const changePointerEvent = (el, onOff) => {
   });
 };
 
-const playerTurn = (playerOne, playerTwo) => {
-  const changePlayerTurn = () => {
-    document.querySelectorAll("#contentContainer > * > *").forEach((el) => {
-      el.addEventListener("click", () => {
-        if (el.parentElement.id === "boardContainerTwo") {
-          playerOne.turn = false;
-          playerTwo.turn = true;
-        } else if (el.parentElement.id === "boardContainerOne") {
-          playerOne.turn = true;
-          playerTwo.turn = false;
-        }
-      });
-    });
-  };
+const toggleTurn = (playerOne, playerTwo) => {
+  playerOne.turn = !playerOne.turn;
+  playerTwo.turn = !playerTwo.turn;
 
-  const clickableBoard = () => {
-    console.log(playerOne.turn, playerTwo.turn);
-    document.querySelectorAll("#boardContainerOne").forEach((btn) => {
-      btn.style.pointerEvents = "none";
-    });
-    if (!playerOne.turn && playerTwo.turn) {
-      changePointerEvent("#boardContainerOne", "auto");
-      changePointerEvent("#boardContainerTwo", "none");
-    } else if (!playerTwo.turn && playerOne.turn) {
-      changePointerEvent("#boardContainerOne", "none");
-      changePointerEvent("#boardContainerTwo", "auto");
+  return playerOne.turn ? playerTwo : playerOne;
+};
+
+const playerHitShip = (event, playerOne, playerTwo) => {
+  if (event !== undefined) {
+    let parentContainer = event.parentElement.id;
+
+    if (event.textContent === "hit" || event.textContent === "sunk") {
+      if (parentContainer === "boardContainerOne") {
+        playerOne.turn = true;
+        playerTwo.turn = false;
+      } else if (parentContainer === "boardContainerTwo") {
+        playerOne.turn = false;
+        playerTwo.turn = true;
+      }
     }
-  };
+  }
+};
 
-  return {
-    changePlayerTurn,
-    clickableBoard,
-  };
+const playerTurn = (playerOne, playerTwo) => {
+  if (!playerOne.turn && playerTwo.turn) {
+    changePointerEvent("#boardContainerOne", "auto");
+    changePointerEvent("#boardContainerTwo", "none");
+  } else if (!playerTwo.turn && playerOne.turn) {
+    changePointerEvent("#boardContainerOne", "none");
+    changePointerEvent("#boardContainerTwo", "auto");
+  }
+};
+
+const noOneCanClick = () => {
+  changePointerEvent("#contentContainer > *", "none");
 };
 
 module.exports = {
@@ -321,4 +323,11 @@ module.exports = {
   computerOptionChecked,
   playerGameLogic,
   playerTurn,
+  toggleTurn,
+  playerHitShip,
+  noOneCanClick,
 };
+
+// remove pause if u hit boat again vs player
+// fix so if u hit a boat u play again vs computer
+// fix so computer plays again if it hits a boat
