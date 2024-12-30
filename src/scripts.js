@@ -235,15 +235,17 @@ const computerOptionChecked = (fn) => {
           let x = Math.floor(Math.random() * 10);
           let y = Math.floor(Math.random() * 10);
 
-          document.querySelectorAll("#boardContainerOne > *").forEach((el) => {
-            if (Number(el.textContent) === Number([x, y].join(""))) {
-              setTimeout(() => {
-                fn(el, x, y);
-                el.disabled = true;
-              }, 3001);
-              attacked = true;
-            }
-          });
+          document
+            .querySelectorAll("#boardContainerOne > *")
+            .forEach((elOne) => {
+              if (Number(elOne.textContent) === Number([x, y].join(""))) {
+                setTimeout(() => {
+                  fn(elOne, x, y);
+                  elOne.disabled = true;
+                }, 2000);
+                attacked = true;
+              }
+            });
         }
       }
     });
@@ -328,6 +330,5 @@ module.exports = {
   noOneCanClick,
 };
 
-// remove pause if u hit boat again vs player
 // fix so if u hit a boat u play again vs computer
-// fix so computer plays again if it hits a boat
+// fix so computer plays again if it hits a boatw

@@ -40,19 +40,26 @@ const Game = () => {
     viewBoardStart: () => {
       setTimeout(() => {
         displayPlayersBoats("boardContainerOne", playerOne.board.board);
-      }, 3000);
+      }, 2000);
     },
     // display current players turns board with a timeout of 3 seconds
-    displayCurrentBoard: () => {
+    displayCurrentBoard: (condition) => {
+      let time = 3000;
+
+      if (condition) {
+        time = 0;
+      }
+
+      console.log(time);
       if (playerOne.turn === true) {
         setTimeout(() => {
           displayPlayersBoats("boardContainerOne", playerOne.board.board);
-        }, 3000);
+        }, time);
         hidePlayerBoats("boardContainerTwo", "gray", "green");
       } else if (playerOne.turn === false) {
         setTimeout(() => {
           displayPlayersBoats("boardContainerTwo", playerTwo.board.board);
-        }, 3000);
+        }, time);
         hidePlayerBoats("boardContainerOne", "gray", "green");
       }
     },
@@ -67,7 +74,12 @@ const Game = () => {
       computerOptionChecked(playerOne.board.receiveAttack);
     },
 
-    newTurn: (event) => {
+    newTurn: (event, condition) => {
+      let time = 3000;
+
+      if (condition) {
+        time = 0;
+      }
       // if hit ship, players turn again
       playerHitShip(event, playerOne, playerTwo);
       // if miss, next players turn
@@ -76,10 +88,11 @@ const Game = () => {
       // new player turn with a cooldown to allow other player to look away in time
       noOneCanClick();
 
+      console.log(time);
       // cooldown to prevent instant clicks
       setTimeout(() => {
         playerTurn(playerOne, playerTwo);
-      }, 3000);
+      }, time);
     },
   };
 };
@@ -105,8 +118,16 @@ document.getElementById("submitBtn").addEventListener("click", (event) => {
     someGame.viewBoardStart();
     document.querySelectorAll("#contentContainer > * > *").forEach((btn) => {
       btn.addEventListener("click", (event) => {
-        someGame.newTurn(event.target);
-        someGame.displayCurrentBoard();
+        if (
+          event.target.textContent === "hit" ||
+          event.target.textContent === "sunk"
+        ) {
+          someGame.newTurn(event.target, true);
+          someGame.displayCurrentBoard(true);
+        } else {
+          someGame.newTurn(event.target);
+          someGame.displayCurrentBoard();
+        }
       });
     });
   } else if (document.getElementById("computerOption").checked) {
@@ -126,7 +147,7 @@ document.getElementById("submitBtn").addEventListener("click", (event) => {
               .forEach((btn) => {
                 btn.style.pointerEvents = "auto";
               });
-          }, 3000);
+          }, 2000);
         }
       });
     });
