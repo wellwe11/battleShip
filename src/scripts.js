@@ -71,6 +71,7 @@ const createElements = (container, amount, type) => {
     let element = document.createElement(type);
     element.textContent = i > 9 ? i : `0${i}`;
     element.id = `${container}btn${i}`;
+    element.setAttribute("data-number", i);
 
     document.getElementById(container).appendChild(element);
   }
@@ -225,99 +226,6 @@ const findDomEl = (el) => {
   return element;
 };
 
-const computerOptionChecked = (fn) => {
-  const attackPlayerBoard = () => {
-    let attacked = false;
-
-    let x = Math.floor(Math.random() * 10);
-    let y = Math.floor(Math.random() * 10);
-
-    document.querySelectorAll("#boardContainerOne > *").forEach((elOne) => {
-      if (
-        Number(elOne.textContent) === Number([x, y].join("")) &&
-        !elOne.disabled
-      ) {
-        setTimeout(() => {
-          fn(elOne, x, y);
-          elOne.disabled = true;
-
-          if (elOne.style.backgroundColor === "white") {
-            attacked = true;
-          } else {
-            attackPlayerBoard();
-          }
-        }, 2000);
-      }
-    });
-  };
-
-  document.querySelectorAll("#boardContainerTwo > *").forEach((el) => {
-    el.addEventListener("click", (event) => {
-      if (
-        event &&
-        event.target.textContent !== "hit" &&
-        event.target.textContent !== "sunk"
-      ) {
-        attackPlayerBoard();
-      }
-    });
-  });
-};
-
-const playerGameLogic = (container, attack) => {
-  findDomEl(container).forEach((el) => {
-    if (!isNaN(el.textContent)) {
-      el.addEventListener("click", () => {
-        attack(el, Number(el.textContent[0]), Number(el.textContent[1]));
-        el.disabled = true;
-      });
-    }
-  });
-};
-
-const changePointerEvent = (el, onOff) => {
-  document.querySelectorAll(el).forEach((btn) => {
-    btn.style.pointerEvents = onOff;
-  });
-};
-
-const toggleTurn = (playerOne, playerTwo) => {
-  playerOne.turn = !playerOne.turn;
-  playerTwo.turn = !playerTwo.turn;
-
-  return playerOne.turn ? playerTwo : playerOne;
-};
-
-const playerHitShip = (event, playerOne, playerTwo) => {
-  if (event !== undefined) {
-    let parentContainer = event.parentElement.id;
-
-    if (event.textContent === "hit" || event.textContent === "sunk") {
-      if (parentContainer === "boardContainerOne") {
-        playerOne.turn = true;
-        playerTwo.turn = false;
-      } else if (parentContainer === "boardContainerTwo") {
-        playerOne.turn = false;
-        playerTwo.turn = true;
-      }
-    }
-  }
-};
-
-const playerTurn = (playerOne, playerTwo) => {
-  if (!playerOne.turn && playerTwo.turn) {
-    changePointerEvent("#boardContainerOne", "auto");
-    changePointerEvent("#boardContainerTwo", "none");
-  } else if (!playerTwo.turn && playerOne.turn) {
-    changePointerEvent("#boardContainerOne", "none");
-    changePointerEvent("#boardContainerTwo", "auto");
-  }
-};
-
-const noOneCanClick = () => {
-  changePointerEvent("#contentContainer > *", "none");
-};
-
 module.exports = {
   create2dArr,
   findTypeOfItem,
@@ -334,10 +242,6 @@ module.exports = {
   findDomEl,
   userInputValue,
   submitClicked,
-  computerOptionChecked,
-  playerGameLogic,
-  playerTurn,
-  toggleTurn,
-  playerHitShip,
-  noOneCanClick,
 };
+
+// final change: if bot hits boat, extend player-click block

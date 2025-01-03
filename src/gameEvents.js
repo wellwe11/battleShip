@@ -6,13 +6,16 @@ const {
   opponentSelector,
   userInputValue,
   submitClicked,
+} = require("./scripts");
+
+const {
   computerOptionChecked,
   playerGameLogic,
   playerTurn,
   toggleTurn,
   playerHitShip,
   noOneCanClick,
-} = require("./scripts");
+} = require("./gameEvents.scripts");
 
 const Game = () => {
   // enforce always to players
@@ -136,23 +139,6 @@ document.getElementById("submitBtn").addEventListener("click", (event) => {
     someGame.displayVsComputer();
     someGame.newTurn();
     someGame.computerAttack();
-
-    document.querySelectorAll("#boardContainerTwo > *").forEach((btn) => {
-      btn.addEventListener("click", (event) => {
-        if (event.target.textContent === "miss") {
-          document.querySelectorAll("#boardContainerTwo > *").forEach((btn) => {
-            btn.style.pointerEvents = "none";
-          });
-          setTimeout(() => {
-            document
-              .querySelectorAll("#boardContainerTwo > *")
-              .forEach((btn) => {
-                btn.style.pointerEvents = "auto";
-              });
-          }, 2000);
-        }
-      });
-    });
   }
 });
 
