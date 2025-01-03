@@ -1,9 +1,6 @@
 const Player = require("../playerObj/playerObj");
 
-const {
-  displayPlayersBoats,
-  changeBtnColor: hidePlayerBoats,
-} = require("../scripts");
+const { changeBtnColor: hidePlayerBoats } = require("../scripts");
 
 const {
   playerGameLogic,
@@ -13,6 +10,7 @@ const {
   noOneCanClick,
   playVsBot,
   placeDeck,
+  displayPlayersBoats,
 } = require("./gameEvents.scripts");
 
 const {

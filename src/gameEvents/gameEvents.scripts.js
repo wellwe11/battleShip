@@ -117,7 +117,22 @@ const placeDeck = (...players) => {
   });
 };
 
-const playerLogic = () => {};
+// view elements that contain objects
+const displayPlayersBoats = (player, board) => {
+  document.querySelectorAll(`#${player} > *`).forEach((el) => {
+    if (
+      !isNaN(el.textContent) &&
+      typeof board[Number(el.textContent[0])][Number(el.textContent[1])] ===
+        "object"
+    ) {
+      el.style.backgroundColor = "gray";
+    } else if (el.textContent === "hit" || el.textContent === "sunk") {
+      el.style.backgroundColor = "red";
+    } else if (el.textContent === "miss") {
+      el.style.backgroundColor = "white";
+    }
+  });
+};
 
 module.exports = {
   playVsBot,
@@ -127,4 +142,5 @@ module.exports = {
   playerHitShip,
   noOneCanClick,
   placeDeck,
+  displayPlayersBoats,
 };
