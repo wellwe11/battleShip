@@ -13,12 +13,7 @@ const {
   displayPlayersBoats,
 } = require("./gameEvents.scripts");
 
-const {
-  loadForm,
-  opponentSelector,
-  submitClicked,
-  userInputValue,
-} = require("../form/form");
+const { userInputValue } = require("../form/form");
 
 const Game = () => {
   // enforce always to players
@@ -26,23 +21,27 @@ const Game = () => {
   const playerTwo = Player(userInputValue("#nameTwo") || "Computer");
 
   // pre-determined turn
-  playerOne.turn = false;
-  playerTwo.turn = true;
+  playerOne.turn = true;
+  playerTwo.turn = false;
 
   placeDeck(playerOne, playerTwo);
 
   let currentPlayer = playerOne.turn === true ? playerOne : playerTwo;
+  console.log(currentPlayer);
   let CurrentPlayerBoard = currentPlayer.board.board;
+  console.log(CurrentPlayerBoard);
 
   // connects buttons to arrays. I.e button 32 is clicked, compared matching array cell
-  playerGameLogic("#boardContainerTwo > *", playerTwo.board.receiveAttack);
   playerGameLogic("#boardContainerOne > *", playerOne.board.receiveAttack);
+  playerGameLogic("#boardContainerTwo > *", playerTwo.board.receiveAttack);
 
   return {
     // enforce player ones board at start to be viewable after 3 seconds
     viewBoardStart: () => {
+      noOneCanClick();
       setTimeout(() => {
         displayPlayersBoats("boardContainerOne", CurrentPlayerBoard);
+        playerTurn(playerOne, playerTwo);
       }, 2000);
     },
     // display current players turns board with a timeout of 3 seconds
@@ -102,44 +101,4 @@ const Game = () => {
   };
 };
 
-//---------------//---------------//---------------//---------------//---------------//---------------
-// event listeners for form
-document.addEventListener("DOMContentLoaded", () => loadForm());
-
-document
-  .getElementById("computerOption")
-  .addEventListener("click", () => opponentSelector().vsComputer());
-
-document
-  .getElementById("playerOption")
-  .addEventListener("click", () => opponentSelector().vsPlayer());
-
-document.getElementById("submitBtn").addEventListener("click", (event) => {
-  submitClicked(event);
-  const someGame = Game();
-
-  if (document.getElementById("playerOption").checked) {
-    someGame.newTurn();
-    someGame.viewBoardStart();
-    document.querySelectorAll("#contentContainer > * > *").forEach((btn) => {
-      btn.addEventListener("click", (event) => {
-        if (
-          event.target.textContent === "hit" ||
-          event.target.textContent === "sunk"
-        ) {
-          someGame.newTurn(event.target, true);
-          someGame.displayCurrentBoard(true);
-        } else {
-          someGame.newTurn(event.target);
-          someGame.displayCurrentBoard();
-        }
-      });
-    });
-  } else if (document.getElementById("computerOption").checked) {
-    someGame.displayVsComputer();
-    someGame.newTurn();
-    someGame.computerAttack();
-  }
-});
-
-//---------------//---------------//---------------//---------------//---------------//---------------
+module.exports = { Game };
