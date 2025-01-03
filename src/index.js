@@ -1,5 +1,5 @@
-require("./UI");
-require("./gameEvents");
-require("./cssReset.css");
-require("./styles.css");
-require("./formStyle.css");
+require("./UI/UI");
+require("./gameEvents/gameEvents");
+require("./UI/cssReset.css");
+require("./UI/styles.css");
+require("./form/formStyle.css");

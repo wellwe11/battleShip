@@ -2,17 +2,15 @@ const computerOptionChecked = (fn) => {
   const attackPlayerBoard = () => {
     let x = Math.floor(Math.random() * 10);
     let y = Math.floor(Math.random() * 10);
+    let CordNumber = Number([x, y].join(""));
 
     document.querySelectorAll("#boardContainerOne > *").forEach((elOne) => {
-      if (
-        Number(elOne.getAttribute("data-number")) === Number([x, y].join(""))
-      ) {
+      if (Number(elOne.getAttribute("data-number")) === CordNumber) {
         if (Number(elOne.textContent)) {
           document
             .querySelectorAll("#boardContainerTwo > *")
             .forEach((elTwo) => {
               if (!elTwo.disabled) {
-                console.log("disabling");
                 elTwo.style.pointerEvents = "none";
               }
             });
@@ -23,7 +21,6 @@ const computerOptionChecked = (fn) => {
             if (elOne.textContent === "hit" || elOne.textContent === "sunk") {
               attackPlayerBoard();
             } else {
-              console.log("enabling");
               document
                 .querySelectorAll("#boardContainerTwo > *")
                 .forEach((elTwo) => {
@@ -40,6 +37,12 @@ const computerOptionChecked = (fn) => {
     });
   };
 
+  return {
+    attackPlayerBoard,
+  };
+};
+
+const playVsBot = (fn) => {
   document.querySelectorAll("#boardContainerTwo > *").forEach((el) => {
     el.addEventListener("click", (event) => {
       if (
@@ -47,26 +50,9 @@ const computerOptionChecked = (fn) => {
         event.target.textContent !== "hit" &&
         event.target.textContent !== "sunk"
       ) {
-        attackPlayerBoard();
+        computerOptionChecked(fn).attackPlayerBoard();
       }
     });
-  });
-};
-
-const playerGameLogic = (container, attack) => {
-  document.querySelectorAll(container).forEach((el) => {
-    if (!isNaN(el.textContent)) {
-      el.addEventListener("click", () => {
-        attack(el, Number(el.textContent[0]), Number(el.textContent[1]));
-        el.disabled = true;
-      });
-    }
-  });
-};
-
-const changePointerEvent = (el, onOff) => {
-  document.querySelectorAll(el).forEach((btn) => {
-    btn.style.pointerEvents = onOff;
   });
 };
 
@@ -93,6 +79,16 @@ const playerHitShip = (event, playerOne, playerTwo) => {
   }
 };
 
+const changePointerEvent = (el, onOff) => {
+  document.querySelectorAll(el).forEach((btn) => {
+    btn.style.pointerEvents = onOff;
+  });
+};
+
+const noOneCanClick = () => {
+  changePointerEvent("#contentContainer > *", "none");
+};
+
 const playerTurn = (playerOne, playerTwo) => {
   if (!playerOne.turn && playerTwo.turn) {
     changePointerEvent("#boardContainerOne", "auto");
@@ -103,21 +99,32 @@ const playerTurn = (playerOne, playerTwo) => {
   }
 };
 
-const noOneCanClick = () => {
-  changePointerEvent("#contentContainer > *", "none");
+const playerGameLogic = (container, attack) => {
+  document.querySelectorAll(container).forEach((el) => {
+    if (!isNaN(el.textContent)) {
+      el.addEventListener("click", () => {
+        attack(el, Number(el.textContent[0]), Number(el.textContent[1]));
+        el.disabled = true;
+      });
+    }
+  });
 };
 
-const otherPlayerTurn = (player) => {
-  if (!player.turn) {
-    changePointerEvent();
-  }
+// place decks for each player
+const placeDeck = (...players) => {
+  players.forEach((player) => {
+    player.board.placeShip();
+  });
 };
+
+const playerLogic = () => {};
 
 module.exports = {
-  computerOptionChecked,
+  playVsBot,
   playerGameLogic,
   toggleTurn,
   playerTurn,
   playerHitShip,
   noOneCanClick,
+  placeDeck,
 };

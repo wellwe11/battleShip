@@ -1,5 +1,5 @@
-const Gameboard = require("../gameBoard");
-const GameBoard = require("../gameBoard");
+const Gameboard = require("./gameBoard");
+const GameBoard = require("./gameBoard");
 
 test("place a boat", () => {
   const someBoard = GameBoard(6);

@@ -1,4 +1,4 @@
-const Ship = require("../boatObject");
+const Ship = require("./boatObject");
 
 test("returns boats state ", () => {
   const boat = Ship(3);

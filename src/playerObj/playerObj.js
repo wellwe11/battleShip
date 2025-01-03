@@ -1,4 +1,4 @@
-const Gameboard = require("./gameBoard");
+const Gameboard = require("../gameBoard/gameBoard");
 
 const Player = (playerName) => {
   let name = playerName || "Computer";

@@ -1,21 +1,26 @@
-const Player = require("./playerObj");
+const Player = require("../playerObj/playerObj");
+
 const {
   displayPlayersBoats,
   changeBtnColor: hidePlayerBoats,
-  loadForm,
-  opponentSelector,
-  userInputValue,
-  submitClicked,
-} = require("./scripts");
+} = require("../scripts");
 
 const {
-  computerOptionChecked,
   playerGameLogic,
   playerTurn,
   toggleTurn,
   playerHitShip,
   noOneCanClick,
+  playVsBot,
+  placeDeck,
 } = require("./gameEvents.scripts");
+
+const {
+  loadForm,
+  opponentSelector,
+  submitClicked,
+  userInputValue,
+} = require("../form/form");
 
 const Game = () => {
   // enforce always to players
@@ -26,13 +31,10 @@ const Game = () => {
   playerOne.turn = false;
   playerTwo.turn = true;
 
-  // place decks for each player
-  const placeDeck = (...players) => {
-    players.forEach((player) => {
-      player.board.placeShip();
-    });
-  };
   placeDeck(playerOne, playerTwo);
+
+  let currentPlayer = playerOne.turn === true ? playerOne : playerTwo;
+  let CurrentPlayerBoard = currentPlayer.board.board;
 
   // connects buttons to arrays. I.e button 32 is clicked, compared matching array cell
   playerGameLogic("#boardContainerTwo > *", playerTwo.board.receiveAttack);
@@ -42,7 +44,7 @@ const Game = () => {
     // enforce player ones board at start to be viewable after 3 seconds
     viewBoardStart: () => {
       setTimeout(() => {
-        displayPlayersBoats("boardContainerOne", playerOne.board.board);
+        displayPlayersBoats("boardContainerOne", CurrentPlayerBoard);
       }, 2000);
     },
     // display current players turns board with a timeout of 3 seconds
@@ -73,7 +75,7 @@ const Game = () => {
 
     // random attack on player board
     computerAttack: () => {
-      computerOptionChecked(playerOne.board.receiveAttack);
+      playVsBot(playerOne.board.receiveAttack);
     },
 
     newTurn: (event, condition) => {

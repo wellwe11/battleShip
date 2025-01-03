@@ -1,15 +1,15 @@
 const {
-  create2dArr: createBoard,
-  findTypeOfItem,
   addItem: addItemToDeck,
   targetHit: boatHit,
   targetHit: boatMiss,
   changeButtonSunk: btnSunk,
   changeObjButtonsSunk: objectSunk,
   addObjectsTo2dArray: createDeck,
-} = require("./scripts");
+} = require("./gameBoard.scripts");
 
-const Ship = require("./boatObject");
+const { create2dArr: createBoard, findTypeOfItem } = require("../scripts");
+
+const Ship = require("../boatObject/boatObject");
 
 const Gameboard = (size) => {
   // create board
@@ -25,8 +25,7 @@ const Gameboard = (size) => {
 
     // gameboard receives click from opposing board
     receiveAttack: (obj, cordOne, cordTwo) => {
-      // cell matching clicked button
-
+      // target array item
       let attackedCell = board[cordOne][cordTwo];
 
       // check if cell is a boat
