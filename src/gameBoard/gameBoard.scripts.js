@@ -1,3 +1,5 @@
+const { displayPlayersBoats } = require("../gameEvents/gameEvents.scripts");
+
 // replace cell with argument. I.e. object/string/number
 const addItem = (board, cordOne, cordTwo, arg) => {
   board[cordOne][cordTwo] = arg;
@@ -84,31 +86,61 @@ const addItems = (array, indexOne, indexTwo, itemslength, arg, type) => {
 
 // checks & adds objects over several cells, in random position
 const addObjectsTo2dArray = (object, array) => {
-  // boats to be placed and their respective length
-  const amount = [2, 2, 2, 3, 3, 3, 4, 4, 5];
+  for (let i = 0; i < array.length; i++) {
+    for (let j = 0; j < array[i].length; j++) {
+      console.log(j);
+      array[i][j] = j;
+    }
+    console.log(array);
+  }
+  const createBoard = () => {
+    // boats to be placed and their respective length
+    const amount = [2, 2, 2, 3, 3, 3, 4, 4, 5];
 
-  for (let i = 0; i < amount.length; i++) {
-    // create a boat for each loop
-    const boat = object(amount[i]);
+    for (let i = 0; i < amount.length; i++) {
+      // create a boat for each loop
+      const boat = object(amount[i]);
 
-    let placed = false;
-    while (!placed) {
-      // random coordinates
-      let x = Math.floor(Math.random() * 10);
-      let y = Math.floor(Math.random() * 10);
+      let placed = false;
+      while (!placed) {
+        // random coordinates
+        let x = Math.floor(Math.random() * 10);
+        let y = Math.floor(Math.random() * 10);
 
-      // check if boat with relevant length fits on current coordinates
-      const spaceToRight = iterateTwoDArray(array, x, y, amount[i], "row"); // row
-      const spaceBelow = iterateTwoDArray(array, y, x, amount[i], "column"); // column
+        // check if boat with relevant length fits on current coordinates
+        const spaceToRight = iterateTwoDArray(array, x, y, amount[i], "row"); // row
+        const spaceBelow = iterateTwoDArray(array, y, x, amount[i], "column"); // column
 
-      if (spaceToRight) {
-        addItems(array, x, y, boat.boatLength, boat, "row");
-        placed = true;
-      } else if (!spaceToRight && spaceBelow) {
-        addItems(array, y, x, boat.boatLength, boat, "column");
-        placed = true;
+        if (spaceToRight) {
+          addItems(array, x, y, boat.boatLength, boat, "row");
+          placed = true;
+        } else if (!spaceToRight && spaceBelow) {
+          addItems(array, y, x, boat.boatLength, boat, "column");
+          placed = true;
+        }
       }
     }
+  };
+  createBoard();
+};
+
+const previewBoard = (boarderId, playerDeck, event) => {
+  let playerBoard = document.getElementById(boarderId);
+
+  if (event.target.checked) {
+    playerBoard.style.display = "grid";
+    playerBoard.style.width = "200px";
+    playerBoard.style.height = "0px";
+    displayPlayersBoats(boarderId, playerDeck);
+  } else {
+    playerBoard.style.display = "none";
+  }
+};
+
+const changePlayerBoard = (boarderId, event, fn, player, playerDeck) => {
+  if (event.target) {
+    fn(player);
+    displayPlayersBoats(`${boarderId}`, playerDeck);
   }
 };
 
@@ -118,4 +150,6 @@ module.exports = {
   boardObjectSunk,
   boardButtonsSunk,
   addObjectsTo2dArray,
+  previewBoard,
+  changePlayerBoard,
 };

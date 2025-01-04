@@ -16,15 +16,13 @@ const {
 const { userInputValue } = require("../form/form");
 
 const Game = () => {
-  // enforce always to players
+  // enforce always two players
   const playerOne = Player(userInputValue("#nameOne"));
   const playerTwo = Player(userInputValue("#nameTwo") || "Computer");
 
   // pre-determined turn
   playerOne.turn = true;
   playerTwo.turn = false;
-
-  placeDeck(playerOne, playerTwo);
 
   let currentPlayer = playerOne.turn === true ? playerOne : playerTwo;
   let CurrentPlayerBoard = currentPlayer.board.board;
@@ -34,6 +32,16 @@ const Game = () => {
   playerGameLogic("#boardContainerTwo > *", playerTwo.board.receiveAttack);
 
   return {
+    createDeck: (player) => {
+      if (player === "playerOne") {
+        placeDeck(playerOne);
+      } else if (player === "playerTwo") {
+        placeDeck(playerTwo);
+      } else {
+        placeDeck(playerOne, playerTwo);
+      }
+    },
+
     // enforce player ones board at start to be viewable after 3 seconds
     viewBoardStart: () => {
       noOneCanClick();
@@ -47,6 +55,8 @@ const Game = () => {
       let time = 3000;
 
       if (condition) {
+        // set time to 0 so if player hits a boat, their turn again without waiting
+        // otherwise 3 second timeout between turns
         time = 0;
       }
 

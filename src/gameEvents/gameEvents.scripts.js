@@ -130,6 +130,8 @@ const displayPlayersBoats = (player, board) => {
       el.style.backgroundColor = "red";
     } else if (el.textContent === "miss") {
       el.style.backgroundColor = "white";
+    } else if (Number(el.textContent)) {
+      el.style.backgroundColor = "green";
     }
   });
 };

@@ -53,8 +53,7 @@ const Gameboard = (size) => {
     },
 
     // returns true if deck contains object
-    areShipsLeft: () =>
-      !findTypeOfItem(board, "object") ? console.log(false) : console.log(true),
+    areShipsLeft: () => (!findTypeOfItem(board, "object") ? false : true),
   };
 };
 

@@ -1,6 +1,12 @@
 const { Game } = require("./gameEvents");
 
 const { loadForm, opponentSelector, submitClicked } = require("../form/form");
+const {
+  changePlayerBoard,
+  previewBoard,
+} = require("../gameBoard/gameBoard.scripts");
+
+const someGame = Game();
 
 // event listeners for form
 document.addEventListener("DOMContentLoaded", () => loadForm());
@@ -13,11 +19,46 @@ document
   .getElementById("playerOption")
   .addEventListener("click", () => opponentSelector().vsPlayer());
 
+// randomize player ones board
+document.getElementById("checkPlayerOne").addEventListener("click", (event) => {
+  previewBoard("boardContainerOne", someGame.playerOne.board.board, event);
+  document
+    .getElementById("newFleetSetup")
+    .addEventListener("click", (event) => {
+      changePlayerBoard(
+        "boardContainerOne",
+        event,
+        someGame.createDeck,
+        "playerOne",
+        someGame.playerOne.board.board
+      );
+    });
+});
+
+// randomize players two board
+document.getElementById("checkPlayerTwo").addEventListener("click", (event) => {
+  previewBoard("boardContainerTwo", someGame.playerTwo.board.board, event);
+  document
+    .getElementById("newFleetSetup")
+    .addEventListener("click", (event) => {
+      changePlayerBoard(
+        "boardContainerTwo",
+        event,
+        someGame.createDeck,
+        "playerTwo",
+        someGame.playerTwo.board.board
+      );
+    });
+});
+
 document.getElementById("submitBtn").addEventListener("click", (event) => {
   submitClicked(event);
-  const someGame = Game();
+  someGame.displayCurrentBoard(true);
 
   if (document.getElementById("playerOption").checked) {
+    let playerTwoScore = 0;
+    let playerOneScore = 0;
+
     someGame.viewBoardStart();
     document.querySelectorAll("#contentContainer > * > *").forEach((btn) => {
       btn.addEventListener("click", (event) => {
@@ -28,6 +69,18 @@ document.getElementById("submitBtn").addEventListener("click", (event) => {
         ) {
           someGame.newTurn(event.target, true);
           someGame.displayCurrentBoard(true);
+
+          if (event.target.textContent === "sunk") {
+            if (event.target.parentElement.id === "boardContainerOne") {
+              playerTwoScore++;
+              document.getElementById("scoreTwo").textContent =
+                playerTwoScore > 8 ? "player two wins!" : playerTwoScore;
+            } else if (event.target.parentElement.id === "boardContainerTwo") {
+              playerOneScore++;
+              document.getElementById("scoreOne").textContent =
+                playerOneScore > 8 ? "player one wins!" : playerOneScore;
+            }
+          }
         } else {
           someGame.newTurn(event.target);
           someGame.displayCurrentBoard();
