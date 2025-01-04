@@ -34,10 +34,15 @@
   align-self: flex-start;
 }
 
-#radioButtonsContainer {
+#radioContainer {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   width: max-content;
   gap: 1rem;
+}
+
+#radioButtonsContainerTwo,
+#radioButtonsContainerOne {
+  display: flex;
 }

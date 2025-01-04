@@ -16,11 +16,12 @@ document
 document.getElementById("submitBtn").addEventListener("click", (event) => {
   submitClicked(event);
   const someGame = Game();
-  console.log(someGame.playerTwo.board.board);
+
   if (document.getElementById("playerOption").checked) {
     someGame.viewBoardStart();
     document.querySelectorAll("#contentContainer > * > *").forEach((btn) => {
       btn.addEventListener("click", (event) => {
+        // !!!!seperate logic from handlers!!!!
         if (
           event.target.textContent === "hit" ||
           event.target.textContent === "sunk"
@@ -35,7 +36,6 @@ document.getElementById("submitBtn").addEventListener("click", (event) => {
     });
   } else if (document.getElementById("computerOption").checked) {
     someGame.displayVsComputer();
-    someGame.newTurn();
     someGame.computerAttack();
   }
 });

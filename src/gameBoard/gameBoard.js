@@ -2,8 +2,8 @@ const {
   addItem: addItemToDeck,
   targetHit: boatHit,
   targetHit: boatMiss,
-  changeButtonSunk: btnSunk,
-  changeObjButtonsSunk: objectSunk,
+  boardObjectSunk,
+  boardButtonsSunk,
   addObjectsTo2dArray: createDeck,
 } = require("./gameBoard.scripts");
 
@@ -32,14 +32,15 @@ const Gameboard = (size) => {
       if (typeof attackedCell === "object") {
         // change color/text of btn
         boatHit(obj, "hit", "red");
-        // change objects values
+
         attackedCell.hit();
 
         if (attackedCell.hasSunk()) {
-          // change last button clicked to sunk
-          btnSunk(board, cordOne, attackedCell, "sunk");
+          // change cells content to sunk
+          boardObjectSunk(board, cordOne, attackedCell, "sunk");
           // find matching buttons to object and change sunk as well
-          objectSunk(board, obj, "sunk");
+          boardButtonsSunk(board, obj, "sunk");
+          console.log(board);
         }
 
         // check if its not been hit before

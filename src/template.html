@@ -31,21 +31,42 @@
           </div>
         </div>
         <br />
-        <p>Vs computer or another player?</p>
-        <div id="radioButtonsContainer">
-          <input type="radio" id="computerOption" name="opponent" checked />
-          <label for="computerOption">Vs Computer</label>
+        <div id="radioContainer">
+          <p>Vs computer or another player?</p>
+          <div id="radioButtonsContainerOne">
+            <br />
+            <input type="radio" id="computerOption" name="opponent" checked />
+            <label for="computerOption">Vs Computer</label>
+            <br />
+            <input type="radio" id="playerOption" name="opponent" />
+            <label for="playerOption">Vs Player</label>
+          </div>
           <br />
-          <input type="radio" id="playerOption" name="opponent" />
-          <label for="playerOption">Vs Player</label>
+          <div id="radioButtonsContainerTwo">
+            <input type="checkbox" id="checkPlayerOne" name="checkPlayer" />
+            <label for="previewBoard">Check player one board</label>
+            <br />
+            <input type="checkbox" id="checkPlayerTwo" name="checkPlayer" />
+            <label for="previewBoard">Check player two board</label>
+          </div>
         </div>
+
+        <br />
         <br />
         <button id="submitBtn">Submit</button>
       </form>
       <div id="mainContent">
         <div id="playerNames">
-          <div><p>Player One</p></div>
-          <div><p>Player Two</p></div>
+          <div id="playerOneDisplay">
+            <h3 id="playerOneName">Player</h3>
+            <h3>One Score:</h3>
+            <h3 id="scoreOne"></h3>
+          </div>
+          <div id="playerTwoDisplay">
+            <h3 id="playerTwoName">Player</h3>
+            <h3>Two Score:</h3>
+            <h3 id="scoreTwo"></h3>
+          </div>
         </div>
         <div id="contentContainer">
           <div id="boardContainerOne"></div>

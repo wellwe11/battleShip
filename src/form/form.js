@@ -19,7 +19,7 @@ const changeDisplay = (...els) => {
 
 const loadForm = () => {
   changeDisplay("#playerForm").displayElement("flex");
-  changeDisplay("#playerTwo", "#contentContainer > *").displayElement("none");
+  changeDisplay("#mainContent").displayElement("none");
 };
 
 const opponentSelector = () => {
@@ -42,7 +42,7 @@ const opponentSelector = () => {
 const submitClicked = (event) => {
   event.preventDefault();
   changeDisplay("#playerForm").displayElement("none");
-  changeDisplay("#contentContainer > *").displayElement("grid");
+  changeDisplay("#mainContent").displayElement("grid");
 };
 
 const userInputValue = (el) => {

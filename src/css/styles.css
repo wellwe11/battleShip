@@ -49,9 +49,14 @@
 
 #playerNames {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
   align-items: end;
 
   grid-column: 2 / 4;
   grid-row: 1;
+}
+
+#playerOneDisplay,
+#playerTwoDisplay {
+  display: flex;
 }

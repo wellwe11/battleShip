@@ -11,6 +11,7 @@ const targetHit = (element, text, color) => {
 
 // find out what each click returns. I.e. a boat or empty cell
 const iterateTwoDArray = (array, indexOne, indexTwo, itemslength, type) => {
+  // exit early if last item is alreay taken
   if (typeof array[indexOne][indexTwo] === "object") {
     return false;
   }
@@ -39,7 +40,7 @@ const iterateTwoDArray = (array, indexOne, indexTwo, itemslength, type) => {
 };
 
 // find & change specific cells value
-const changeButtonSunk = (array, row, condition, arg) => {
+const boardObjectSunk = (array, row, condition, arg) => {
   for (let i = 0; i < array[row].length; i++) {
     for (let j = 0; j < array[i].length; j++) {
       if (array[i][j] === condition) {
@@ -50,14 +51,14 @@ const changeButtonSunk = (array, row, condition, arg) => {
 };
 
 // find matching arguments and replace cells with same object with argument
-const changeObjButtonsSunk = (array, el, arg) => {
+const boardButtonsSunk = (array, el, arg) => {
   for (let i = 0; i < array.length; i++) {
     for (let j = 0; j < array[i].length; j++) {
       if (array[i][j] === arg) {
         el.parentElement.querySelectorAll("*").forEach((btn) => {
-          let btnIdNr = btn.id.replace(/\D/g, "");
+          let btnIdNr = Number(btn.id.replace(/\D/g, ""));
 
-          if (Number(btnIdNr) === Number([i, j].join(""))) {
+          if (btnIdNr === Number([i, j].join(""))) {
             btn.textContent = arg;
           }
         });
@@ -114,7 +115,7 @@ const addObjectsTo2dArray = (object, array) => {
 module.exports = {
   addItem,
   targetHit,
-  changeButtonSunk,
-  changeObjButtonsSunk,
+  boardObjectSunk,
+  boardButtonsSunk,
   addObjectsTo2dArray,
 };

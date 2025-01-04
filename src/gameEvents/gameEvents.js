@@ -27,9 +27,7 @@ const Game = () => {
   placeDeck(playerOne, playerTwo);
 
   let currentPlayer = playerOne.turn === true ? playerOne : playerTwo;
-  console.log(currentPlayer);
   let CurrentPlayerBoard = currentPlayer.board.board;
-  console.log(CurrentPlayerBoard);
 
   // connects buttons to arrays. I.e button 32 is clicked, compared matching array cell
   playerGameLogic("#boardContainerOne > *", playerOne.board.receiveAttack);
@@ -68,6 +66,7 @@ const Game = () => {
     // constantly display player boats as changing isn't needed
     displayVsComputer: () => {
       displayPlayersBoats("boardContainerOne", playerOne.board.board);
+      playerTurn(playerOne, playerTwo);
     },
 
     // random attack on player board
@@ -89,7 +88,6 @@ const Game = () => {
       // new player turn with a cooldown to allow other player to look away in time
       noOneCanClick();
 
-      console.log(time);
       // cooldown to prevent instant clicks
       setTimeout(() => {
         playerTurn(playerOne, playerTwo);
