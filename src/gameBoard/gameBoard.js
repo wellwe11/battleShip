@@ -40,7 +40,6 @@ const Gameboard = (size) => {
           boardObjectSunk(board, cordOne, attackedCell, "sunk");
           // find matching buttons to object and change sunk as well
           boardButtonsSunk(board, obj, "sunk");
-          console.log(board);
         }
 
         // check if its not been hit before

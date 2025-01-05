@@ -30,6 +30,10 @@
   flex-direction: column;
 }
 
+#playerTwo {
+  display: none;
+}
+
 #nameInputDiv label {
   align-self: flex-start;
 }

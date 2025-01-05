@@ -88,10 +88,8 @@ const addItems = (array, indexOne, indexTwo, itemslength, arg, type) => {
 const addObjectsTo2dArray = (object, array) => {
   for (let i = 0; i < array.length; i++) {
     for (let j = 0; j < array[i].length; j++) {
-      console.log(j);
       array[i][j] = j;
     }
-    console.log(array);
   }
   const createBoard = () => {
     // boats to be placed and their respective length

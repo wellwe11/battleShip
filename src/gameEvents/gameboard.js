@@ -55,10 +55,25 @@ document.getElementById("submitBtn").addEventListener("click", (event) => {
   submitClicked(event);
   someGame.displayCurrentBoard(true);
 
+  if (
+    !someGame.playerOne.board.board.some((item) =>
+      item.some((cell) => typeof cell === "object")
+    )
+  ) {
+    someGame.createDeck("playerOne");
+  }
+
+  if (
+    !someGame.playerTwo.board.board.some((item) =>
+      item.some((cell) => typeof cell === "object")
+    )
+  ) {
+    someGame.createDeck("playerTwo");
+  }
+
   if (document.getElementById("playerOption").checked) {
     let playerTwoScore = 0;
     let playerOneScore = 0;
-
     someGame.viewBoardStart();
     document.querySelectorAll("#contentContainer > * > *").forEach((btn) => {
       btn.addEventListener("click", (event) => {
