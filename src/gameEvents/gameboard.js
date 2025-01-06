@@ -11,20 +11,32 @@ const someGame = Game();
 // event listeners for form
 document.addEventListener("DOMContentLoaded", () => loadForm());
 
-document
-  .getElementById("computerOption")
-  .addEventListener("click", () => opponentSelector().vsComputer());
+document.getElementById("computerOption").addEventListener("click", () => {
+  document.getElementById("checkPlayerTwo").setAttribute("disabled", true);
+  opponentSelector().vsComputer();
+});
 
-document
-  .getElementById("playerOption")
-  .addEventListener("click", () => opponentSelector().vsPlayer());
+document.getElementById("playerOption").addEventListener("click", () => {
+  document.getElementById("checkPlayerTwo").removeAttribute("disabled");
+  opponentSelector().vsPlayer();
+});
 
 // randomize player ones board
 document.getElementById("checkPlayerOne").addEventListener("click", (event) => {
+  if (document.getElementById("checkPlayerOne").checked) {
+    document.getElementById("newFleetSetup").removeAttribute("disabled");
+  } else if (
+    !document.getElementById("checkPlayerOne").checked &&
+    !document.getElementById("checkPlayerTwo").checked
+  ) {
+    document.getElementById("newFleetSetup").setAttribute("disabled", true);
+  }
+
   previewBoard("boardContainerOne", someGame.playerOne.board.board, event);
   document
     .getElementById("newFleetSetup")
     .addEventListener("click", (event) => {
+      event.preventDefault();
       changePlayerBoard(
         "boardContainerOne",
         event,
@@ -37,10 +49,21 @@ document.getElementById("checkPlayerOne").addEventListener("click", (event) => {
 
 // randomize players two board
 document.getElementById("checkPlayerTwo").addEventListener("click", (event) => {
+  if (document.getElementById("checkPlayerTwo").checked) {
+    document.getElementById("newFleetSetup").removeAttribute("disabled");
+  } else if (
+    !document.getElementById("checkPlayerOne").checked &&
+    !document.getElementById("checkPlayerTwo").checked
+  ) {
+    document.getElementById("newFleetSetup").setAttribute("disabled", true);
+  }
+
   previewBoard("boardContainerTwo", someGame.playerTwo.board.board, event);
   document
     .getElementById("newFleetSetup")
     .addEventListener("click", (event) => {
+      event.preventDefault();
+      document.getElementById("newFleetSetup").removeAttribute("disabled");
       changePlayerBoard(
         "boardContainerTwo",
         event,
